@@ -13,7 +13,7 @@ const routes = [
   { name: 'login', path: '', component: LogIn },
 
   {
-    name: 'user-module', path: '/users/:user_id/:role', component: ToolBar,
+    name: 'user-module', path: '/users', component: ToolBar,
     children: [
       {
         path: 'bids', component: RouterView,

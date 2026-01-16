@@ -67,8 +67,14 @@
 <script>
 import { totalStore } from "@/components/actions"
 import { successAlert, exceptionAlert } from "@/components/alerts"
+import { useUserStore } from "@/stores/user.store";
 
 export default {
+  setup() {
+    const userStore = useUserStore()
+    return { userStore }
+  },
+
   data: () => ({
     role: '',
     totalStore,
@@ -77,8 +83,8 @@ export default {
   }),
 
   mounted() {
-    this.role = this.$route.params.role;
-    this.totalStore.refreshTotalCounts(this.$route.params.userId)
+    this.role = this.store.authorities
+    this.totalStore.refreshTotalCounts(this.store.id)
   },
 
   computed: {
