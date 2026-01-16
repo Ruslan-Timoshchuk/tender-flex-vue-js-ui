@@ -1,6 +1,4 @@
 export const URL_REST_API = {
-  HOST: 'http://localhost:8080',
-  LOGIN: 'api/v1/auth/login',
   COUNTRIES_ALL: 'api/v1/countries/all',
   CPVS_ALL: 'api/v1/cpvs/all',
   CONTRACTS: 'api/v1/contracts',

@@ -28,30 +28,6 @@ export const fetchFromEndpoint = async (endpointKey) => {
   });
 }
 
-export const confirmRedirect = async (email, password) => {
-  const userAuthenticationResponse = await authenticate({ email, password });
-  router.push({
-    name: "user-module",
-    params: {
-      user_id: userAuthenticationResponse.data.userId,
-      role: USER_ROLE[userAuthenticationResponse.data.role]
-    }
-  });
-}
-
-const authenticate = (authenticationRequest) => {
-  try {
-    return axios.post(`${URL_REST_API.HOST}/${URL_REST_API.LOGIN}`, authenticationRequest, {
-      withCredentials: true,
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-  } catch (error) {
-    exceptionAlert.activateAlert(error.response.data.message)
-  }
-}
-
 export const uploadFile = (file) => {
   const formData = new FormData();
   formData.append('file', file);
