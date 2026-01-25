@@ -27,12 +27,6 @@ export const LANGUAGE = {
   ENGLISH: "English"
 }
 
-export const USER_ROLE = {
-  CONTRACTOR: "contractor",
-  BIDDER: "bidder",
-  ADMIN: "admin"
-}
-
 export const CONTRACT_TYPE = {
   WORKS: "Works",
   SUPPLIES: "Supplies",

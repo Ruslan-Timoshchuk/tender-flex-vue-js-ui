@@ -13,10 +13,8 @@ export const URL_REST_API = {
   PROCUREMENTS_OFFER_REJECT: 'api/v1/procurements/offer-reject',
   TENDERS: 'api/v1/tenders',
   TENDERS_PAGE: 'api/v1/tenders/page',
-  TENDERS_COUNT: 'api/v1/tenders/count',
   FILES: 'api/v1/files',
   OFFERS: 'api/v1/offers',
   OFFERS_PAGE: 'api/v1/offers/page',
-  OFFERS_COUNT: 'api/v1/offers/count',
   OFFERS_STATUS: 'api/v1/offers/status'
 }

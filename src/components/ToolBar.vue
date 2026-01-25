@@ -48,12 +48,15 @@
         >
         + Create new Tender
       </v-chip>
-      <v-chip
-        class="mt-2 mr-4"
+      <v-chip 
+        v-for="authority in authorities" 
+        :key="authority"
+        class="mt-2 mx-5"
         variant="flat"
         color="blue-darken-3"
         prepend-icon="mdi-account-check-outline"
-        > {{ role }}
+      > 
+        {{ resolveAuthorityTitle(authority) }}
       </v-chip>
       <v-btn icon class="mr-6" router-link to="/">
         <v-icon>mdi-export</v-icon>
@@ -65,9 +68,10 @@
  </template>
 
 <script>
-import { totalStore } from "@/components/actions"
-import { successAlert, exceptionAlert } from "@/components/alerts"
+import { totalStore } from "@/stores/bids.counter.store";
+import { successAlert, exceptionAlert } from "@/components/alerts";
 import { useUserStore } from "@/stores/user.store";
+import { resolveAuthorityTitle } from "@/components/composables/authority.resolver";
 
 export default {
   setup() {
@@ -76,20 +80,21 @@ export default {
   },
 
   data: () => ({
-    role: '',
+    resolveAuthorityTitle,
+    authorities: '',
     totalStore,
     successAlert,
     exceptionAlert
   }),
 
   mounted() {
-    this.role = this.store.authorities
-    this.totalStore.refreshTotalCounts(this.store.id)
+    this.authorities = this.userStore.authorities
+    this.totalStore.refreshTotalCounts(this.userStore.id)
   },
 
   computed: {
     isContractorTenderList() {
-      return this.$route.name === 'tenders' && this.role === 'contractor';
+      return this.$route.name === 'tenders' && this.authorities === 'contractor';
     }
   }
 }
