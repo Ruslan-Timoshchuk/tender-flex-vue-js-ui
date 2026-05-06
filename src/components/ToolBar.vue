@@ -56,7 +56,7 @@
         color="blue-darken-3"
         prepend-icon="mdi-account-check-outline"
       > 
-        {{ resolveAuthorityTitle(authority) }}
+        {{ authority.label }}
       </v-chip>
       <v-btn icon class="mr-6" router-link to="/">
         <v-icon>mdi-export</v-icon>
@@ -71,7 +71,6 @@
 import { totalStore } from "@/stores/bids.counter.store";
 import { successAlert, exceptionAlert } from "@/components/alerts";
 import { useUserStore } from "@/stores/user.store";
-import { resolveAuthorityTitle } from "@/components/composables/authority.resolver";
 
 export default {
   setup() {
@@ -80,8 +79,7 @@ export default {
   },
 
   data: () => ({
-    resolveAuthorityTitle,
-    authorities: '',
+    authorities: [],
     totalStore,
     successAlert,
     exceptionAlert
