@@ -49,7 +49,7 @@
         + Create new Tender
       </v-chip>
       <v-chip 
-        v-for="authority in authorities" 
+        v-for="authority in userStore.authorities" 
         :key="authority"
         class="mt-2 mx-5"
         variant="flat"
@@ -86,7 +86,6 @@ export default {
   }),
 
   mounted() {
-    this.authorities = this.userStore.authorities
     this.totalStore.refreshTotalCounts(this.userStore.id)
   },
 

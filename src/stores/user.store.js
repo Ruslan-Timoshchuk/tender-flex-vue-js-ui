@@ -20,7 +20,16 @@ export const useUserStore = defineStore('user', {
             } else {
                 return [];
             }
-        }
+        },
+        isAdministrator() {
+            return this.hasAuthority('ADMINISTRATOR');
+        },
+        isContractor() {
+            return this.hasAuthority('CONTRACTOR');
+        },
+        isBidder() {
+            return this.hasAuthority('BIDDER');
+        },
     },
 
     actions: {
@@ -31,6 +40,9 @@ export const useUserStore = defineStore('user', {
         clearUser() {
             this.user = null
         },
+        hasAuthority(name) {
+            return this.user.authorities.some(authoriry => authoriry.name === name)
+        }
     },
 
 })
