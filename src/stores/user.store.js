@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { authenticate } from '@/services/authentication.api';
+import { authenticate, loadAuthenticationState } from '@/services/authentication.api';
 
 export const useUserStore = defineStore('user', {
     state: () => ({
@@ -35,6 +35,10 @@ export const useUserStore = defineStore('user', {
     actions: {
         async authenticate(authenticationRequest) {
             this.user = await authenticate(authenticationRequest);
+        },
+
+        async loadAuthenticationState() {
+            this.user = await loadAuthenticationState();
         },
 
         clearUser() {

@@ -16,10 +16,17 @@ import { registerPlugins } from '@/plugins'
 
 import "@/assets/global.css";
 
+import { useUserStore } from '@/stores/user.store'
+
 const app = createApp(TenderFlex)
 const pinia = createPinia()
+
+app.use(pinia)
+
+const userStore = useUserStore(pinia)
+
+await userStore.loadAuthenticationState()
 
 registerPlugins(app)
 
 app.mount('#app')
-app.use(pinia)
