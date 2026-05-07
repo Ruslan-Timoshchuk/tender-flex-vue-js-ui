@@ -40,7 +40,7 @@
         {{ exceptionAlert.message }}
       </v-chip>
       <v-chip
-        v-if="isContractorTenderList"
+        v-if="showNewTenderBtn"
         router-link :to="{ name: 'new-tender' }"
         variant="flat"
         color="indigo-darken-4"
@@ -90,8 +90,8 @@ export default {
   },
 
   computed: {
-    isContractorTenderList() {
-      return this.$route.name === 'tenders' && this.authorities === 'contractor';
+    showNewTenderBtn() {
+      return this.userStore.isContractor && this.$route.name !== 'new-tender';
     }
   }
 }
