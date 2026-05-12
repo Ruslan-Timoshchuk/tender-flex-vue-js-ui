@@ -8,8 +8,8 @@
         color="blue-darken-3"
         text-color="white"
         prepend-icon="mdi-pulse"
-        router-link :to="{ name: 'tenders' }">
-        Tenders {{ totalStore.tenders }}
+        :to="{ name: 'tenders' }">
+        Tenders {{ bidsCounter.tenders }}
       </v-chip>
       <v-chip
         class="my-2 ml-10"
@@ -17,8 +17,8 @@
         color="blue-darken-3"
         text-color="white"
         prepend-icon="mdi-message-processing-outline"
-        router-link :to="{ name: 'offers' }">
-        Offers {{ totalStore.offers }}
+        :to="{ name: 'offers' }">
+        Offers {{ bidsCounter.offers }}
       </v-chip>
       <v-spacer></v-spacer>
       <v-chip
@@ -41,7 +41,7 @@
       </v-chip>
       <v-chip
         v-if="showNewTenderBtn"
-        router-link :to="{ name: 'new-tender' }"
+        :to="{ name: 'new-tender' }"
         variant="flat"
         color="indigo-darken-4"
         class="my-2 mr-6"
@@ -58,7 +58,7 @@
       > 
         {{ authority.label }}
       </v-chip>
-      <v-btn icon class="mr-6" router-link to="/">
+      <v-btn icon class="mr-6" to="/">
         <v-icon>mdi-export</v-icon>
       </v-btn>
       <v-divider class="mt-1" color="black"></v-divider>
@@ -68,7 +68,7 @@
  </template>
 
 <script>
-import { totalStore } from "@/stores/bids.counter.store";
+import { bidsCounter } from "@/stores/bids.counter.store";
 import { successAlert, exceptionAlert } from "@/components/alerts";
 import { useUserStore } from "@/stores/user.store";
 
@@ -80,13 +80,13 @@ export default {
 
   data: () => ({
     authorities: [],
-    totalStore,
+    bidsCounter,
     successAlert,
     exceptionAlert
   }),
 
-  mounted() {
-    this.totalStore.refreshTotalCounts(this.userStore.id)
+  async mounted() {
+    await this.bidsCounter.refreshTotalCounts()
   },
 
   computed: {

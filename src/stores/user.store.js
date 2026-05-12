@@ -38,12 +38,17 @@ export const useUserStore = defineStore('user', {
         },
 
         async loadAuthenticationState() {
-            this.user = await loadAuthenticationState();
+            try {
+                this.user = await loadAuthenticationState();
+            } catch (error) {
+                this.user = null
+            }
         },
 
         clearUser() {
             this.user = null
         },
+        
         hasAuthority(name) {
             return this.user.authorities.some(authoriry => authoriry.name === name)
         }
