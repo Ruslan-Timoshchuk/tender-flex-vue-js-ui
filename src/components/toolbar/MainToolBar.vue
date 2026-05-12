@@ -12,7 +12,7 @@
         color="blue-darken-3"
         text-color="white"
         prepend-icon="mdi-pulse"
-        :to="{ name: 'tenders' }">
+        :to="{ name: tendersRouteName }">
         Tenders {{ tenders }}
       </v-chip>
       <v-chip
@@ -21,7 +21,7 @@
         color="blue-darken-3"
         text-color="white"
         prepend-icon="mdi-message-processing-outline"
-        :to="{ name: 'offers' }">
+        :to="{ name: offersRouteName }">
         Offers {{ offers }}
       </v-chip>
       <v-spacer></v-spacer>
@@ -79,8 +79,10 @@ import { successAlert, exceptionAlert } from "@/components/alerts";
 export default {
 
   props: {
+    tendersRouteName: { type: String, required: true },
     tenders: { type: Number },
     offers: { type: Number },
+    offersRouteName: { type: String, required: true },
     authorities: { type: Array }
   },
 

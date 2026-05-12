@@ -1,8 +1,10 @@
 <template>
     <MainToolBar 
-      :authorities=userStore.authorities
+      tendersRouteName='contractor-tenders'
       :tenders=bidsCounter.tenders
-      :offers=bidsCounter.offers>
+      offersRouteName='contractor-offers'
+      :offers=bidsCounter.offers
+      :authorities=userStore.authorities>
         <template #actions>
             <v-chip 
               v-if="showNewTenderBtn"

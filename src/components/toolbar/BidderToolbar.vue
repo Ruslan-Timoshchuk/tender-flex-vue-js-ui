@@ -1,8 +1,10 @@
 <template>
     <MainToolBar
-      :authorities=userStore.authorities
+      tendersRouteName='bidder-tenders'
       :tenders=bidsCounter.tenders
-      :offers=bidsCounter.offers>
+      offersRouteName='bidder-offers'
+      :offers=bidsCounter.offers
+      :authorities=userStore.authorities>
     </MainToolBar>
 </template>
 
