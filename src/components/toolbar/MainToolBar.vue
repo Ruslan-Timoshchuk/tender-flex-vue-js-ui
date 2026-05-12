@@ -1,7 +1,11 @@
 <template>
- <v-toolbar color="blue">
+ <v-toolbar 
+   color="blue">
     <v-row>
-      <v-img class="ml-10" max-width="140" src="@/assets/tender-flex-Logo.svg" />
+      <v-img 
+        class="ml-10" 
+        max-width="140" 
+        src="@/assets/tender-flex-Logo.svg" />
       <v-chip
         class="my-2 ml-12"
         variant="flat"
@@ -9,7 +13,7 @@
         text-color="white"
         prepend-icon="mdi-pulse"
         :to="{ name: 'tenders' }">
-        Tenders {{ bidsCounter.tenders }}
+        Tenders {{ tenders }}
       </v-chip>
       <v-chip
         class="my-2 ml-10"
@@ -18,7 +22,7 @@
         text-color="white"
         prepend-icon="mdi-message-processing-outline"
         :to="{ name: 'offers' }">
-        Offers {{ bidsCounter.offers }}
+        Offers {{ offers }}
       </v-chip>
       <v-spacer></v-spacer>
       <v-chip
@@ -39,17 +43,12 @@
         color="red">
         {{ exceptionAlert.message }}
       </v-chip>
-      <v-chip
-        v-if="showNewTenderBtn"
-        :to="{ name: 'new-tender' }"
-        variant="flat"
-        color="indigo-darken-4"
-        class="my-2 mr-6"
-        >
-        + Create new Tender
-      </v-chip>
+
+      <!-- injected actions -->
+      <slot name="actions" />
+
       <v-chip 
-        v-for="authority in userStore.authorities" 
+        v-for="authority in authorities" 
         :key="authority"
         class="mt-2 mx-5"
         variant="flat"
@@ -58,41 +57,37 @@
       > 
         {{ authority.label }}
       </v-chip>
-      <v-btn icon class="mr-6" to="/">
-        <v-icon>mdi-export</v-icon>
+      <v-btn 
+        icon class="mr-6" 
+        to="/">
+        <v-icon
+          >mdi-export
+        </v-icon>
       </v-btn>
-      <v-divider class="mt-1" color="black"></v-divider>
+      <v-divider 
+        class="mt-1" 
+        color="black">
+      </v-divider>
     </v-row>
   </v-toolbar>
   <router-view></router-view>
  </template>
 
 <script>
-import { bidsCounter } from "@/stores/bids.counter.store";
 import { successAlert, exceptionAlert } from "@/components/alerts";
-import { useUserStore } from "@/stores/user.store";
 
 export default {
-  setup() {
-    const userStore = useUserStore()
-    return { userStore }
+
+  props: {
+    tenders: { type: Number },
+    offers: { type: Number },
+    authorities: { type: Array }
   },
 
   data: () => ({
-    authorities: [],
-    bidsCounter,
     successAlert,
     exceptionAlert
-  }),
+  })
 
-  async mounted() {
-    await this.bidsCounter.refreshTotalCounts()
-  },
-
-  computed: {
-    showNewTenderBtn() {
-      return this.userStore.isContractor && this.$route.name !== 'new-tender';
-    }
-  }
 }
 </script>

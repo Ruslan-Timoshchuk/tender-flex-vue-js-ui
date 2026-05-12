@@ -58,9 +58,13 @@ export default {
       try {
         const userStore = useUserStore();
         await userStore.authenticate(authenticationRequest)
-        router.push({
-          name: "user-module"
-        });
+        if (userStore.isContractor) {
+          router.push({ name: 'contractor-module' });
+        } else if (userStore.isBidder) {
+          router.push({ name: 'bidder-module'});
+        } else if (userStore.isAdministrator) {
+          router.push({ name: 'administrator-module'});
+        }
       } catch (error) {
         exceptionAlert.activateAlert(error)
       }
