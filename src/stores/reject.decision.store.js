@@ -6,8 +6,7 @@ export const useRejectDecisionStore = defineStore('reject-decision', {
 
     actions: {
         async saveRejectDecision(rejectDecisionRequest) {
-            const { data } = await save(rejectDecisionRequest);
-            return data;
+            return await save(rejectDecisionRequest);
         }
     }
 })
