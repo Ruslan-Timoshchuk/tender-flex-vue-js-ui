@@ -1,4 +1,4 @@
-import { axiosApiClient } from "@/axios.api.client";
+import axiosApiClient from "@/services/axios.api.client";
 
 const URL_CONTRACTS = 'api/v1/contracts';
 

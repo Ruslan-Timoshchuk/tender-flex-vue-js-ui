@@ -1,4 +1,4 @@
-import { axiosApiClient } from "@/axios.api.client";
+import axiosApiClient from "@/services/axios.api.client";
 
 const URL_REJECT_DECISIONS = 'api/v1/reject-decisions';
 

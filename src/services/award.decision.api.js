@@ -1,4 +1,4 @@
-import { axiosApiClient } from "@/axios.api.client";
+import axiosApiClient from "@/services/axios.api.client";
 
 const URL_AWARD_DECISIONS = '/api/v1/award-decisions';
 
