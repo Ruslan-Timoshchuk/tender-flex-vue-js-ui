@@ -20,8 +20,8 @@ export const countAllTenders = async () => {
     return tendersCountResponse.data;
 }
 
-export const findTendersByContractor = async (contractorId, page, pageSize) => {
+export const findTendersByContractor = async (page, pageSize) => {
     const tendersPageResponse = await axiosApiClient
-        .get(`${URL_CONTRACTOR_TENDERS_PAGE}/${contractorId}?page=${page}&pageSize=${pageSize}`);
+        .get(`${URL_CONTRACTOR_TENDERS_PAGE}?page=${page}&pageSize=${pageSize}`);
     return tendersPageResponse.data;
 }
