@@ -16,7 +16,7 @@
 
         <v-container id="scroll-target" style="max-height: 25rem" class="overflow-y-auto"
           v-scroll:#scroll-target="onScroll">
-          <v-sheet v-for="tender in tenders" :key="tender.id">
+          <v-sheet v-for="tender in tenderStore.getTenders" :key="tender.id">
             <v-sheet :class="{
               'table-row': tender.tenderStatusName === 'TENDER_IN_PROGRESS',
               'table-row disabled': tender.tenderStatusName === 'TENDER_CLOSED'
@@ -44,19 +44,13 @@
 </template>
 
 <script>
-import { findTendersByContractor } from "@/services/tender.api"
+import { useTenderStore } from "@/stores/tender.store"
 import { navigateToTender } from "@/components/actions"
 import ToolBarTitle from "@/components/childs/ToolBarTitle.vue"
 import EmptyTableTitle from "@/components/childs/EmptyTableTitle.vue"
 import TableHeader from "@/components/tender/childs/TableHeader.vue"
-import { useUserStore } from "@/stores/user.store";
 
 export default {
-setup() {
-    const userStore = useUserStore()
-    return { userStore }
-  },
-
   components:{
     ToolBarTitle,
     EmptyTableTitle,
@@ -64,7 +58,7 @@ setup() {
   },
 
   data: () => ({
-    findTendersByContractor,
+    tenderStore: useTenderStore(),
     loading: false,
     bottom: 285,
     page: 1,
@@ -77,37 +71,28 @@ setup() {
   }),
 
   methods: {
-    async getTendersPage() {
+    onScroll(e) {
       try {
-        this.loading = true
-        const tendersPageResponse = 
-            await findTendersByContractor(this.page, this.pageSize);
-        this.pages = tendersPageResponse.pages
-          for (const tender of tendersPageResponse.content) {
-            this.tenders.push(tender);
-          }
-        this.page++;
-        this.loading = false
+        const currentPage = Math.ceil(e.target.scrollTop / this.bottom);
+        if (currentPage === this.page && !this.loading && this.page <= this.pages) {
+          this.loading = true
+          this.page++;
+          this.tenderStore.loadMoreByContractor(this.page, this.pageSize);
+          this.loading = false
+        }
       } catch (error) {
         console.log('There was an error', error);
-      }
-    },
-
-    onScroll(e) {
-      const currentPage = Math.ceil(e.target.scrollTop / this.bottom);
-      if (currentPage === this.page && !this.loading && this.page <= this.pages) {
-        this.getTendersPage()
       }
     }
   },
 
   mounted() {
-    this.getTendersPage();
+    this.tenderStore.loadByContractor(this.page, this.pageSize);
   },
 
   computed: {
     isTenders() {
-      return this.tenders.length > 0;
+      return this.tenderStore.getTenders.length > 0;
     }
   }
 }
