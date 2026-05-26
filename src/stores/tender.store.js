@@ -30,12 +30,12 @@ export const useTenderStore = defineStore('tender', {
         },
 
          async loadByBidder(page, pageSize) {
-            const { content } = await findTendersByContractor(page, pageSize);
+            const { content } = await findTendersByBidder(page, pageSize);
             this.tenders = content;
         },
 
         async loadMoreByBidder(page, pageSize) {
-            const { content } = await findTendersByContractor(page, pageSize);
+            const { content } = await findTendersByBidder(page, pageSize);
             this.tenders.push(...content);
         }
     }

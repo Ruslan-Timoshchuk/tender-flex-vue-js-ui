@@ -64,9 +64,6 @@ export default {
     page: 1,
     pageSize: 10,
     pages: 1,
-    tenders: 0,
-    offers: 0,
-    tenders: [],
     navigateToTender
   }),
 
