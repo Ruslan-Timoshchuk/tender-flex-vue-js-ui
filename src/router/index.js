@@ -19,19 +19,16 @@ const routes = [
     children: [
       { name: 'new-tender', path: 'create-new-tender', component: Tender },
       { name: 'contractor-tenders', path: 'tenders', component: ContractorTenderSummary },
-      { name: 'contractor-offers', path: 'offers', component: RouterView }
+      { name: 'contractor-offers', path: 'offers', component: OfferList }
     ]
   },
 
   {
     name: 'bidder-module', path: '/bidders', component: BidderToolbar,
     children: [
-      {
-        name: 'bidder-tenders', path: 'tenders', component: BidderTenderSummary,
-      },
-      {
-        name: 'bidder-offers', path: 'offers', component: RouterView,
-      }
+      { name: 'new-offer', path: 'send-new-offer', component: Offer },
+      { name: 'bidder-tenders', path: 'tenders', component: BidderTenderSummary },
+      { name: 'bidder-offers', path: 'offers', component: OfferList }
     ]
   },
 
@@ -44,20 +41,6 @@ const routes = [
         path: 'bids', component: RouterView,
         children: [
           { name: 'bid-details', path: 'details', component: BidDetails },
-          {
-            path: 'tenders', component: RouterView,
-            children: [
-              
-              
-            ]
-          },
-          {
-            path: 'offers', component: RouterView,
-            children: [
-              { name: 'new-offer', path: 'send-new-offer', component: Offer },
-              { name: 'offers', path: 'list', component: OfferList },
-            ]
-          },
         ]
       }
     ],

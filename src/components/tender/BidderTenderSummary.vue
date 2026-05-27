@@ -1,6 +1,6 @@
 <template>
   <ToolBarTitle 
-    title="My Tenders">
+    title="Tenders">
   </ToolBarTitle>
 
   <v-container fluid class="d-flex align-center justify-center mt-n12">
@@ -8,10 +8,10 @@
       <div v-if="isTenders">
         <TableHeader 
           field="Field" 
-          companyName="Oficial Name" 
-          tenderStatus="Status" 
+          companyName="Contractor Name" 
+          tenderStatus="Tender Status" 
           deadline="Deadline"
-          offerData="Offers">
+          offerData="Offer Status">
         </TableHeader>
         <v-container id="scroll-target" style="max-height: 25rem" class="overflow-y-auto"
           v-scroll:#scroll-target="onScroll">
@@ -28,13 +28,13 @@
               <td class="v-col-2 text-center">{{ tender.contractorName }}</td>
               <td class="v-col-2 text-center">{{ tender.tenderStatusLabel }}</td>
               <td class="v-col-2 text-center">{{ tender.offerSubmissionDeadline }}</td>
-              <td class="v-col-2 text-center">{{ tender.offersAmount }}</td>
+              <td class="v-col-2 ml-6 text-left">{{ tender.offerStatusLabel }}</td>
             </v-sheet>
           </v-sheet>
         </v-container>
       </div>
       <EmptyTableTitle 
-        v-else message="“There are no published Tenders. Create a Tender.”">
+        v-else message="“There are no available Tenders.”">
       </EmptyTableTitle>
     </v-card>
   </v-container>
@@ -53,7 +53,7 @@ export default {
   components: {
     ToolBarTitle,
     EmptyTableTitle,
-    TableHeader,
+    TableHeader
   },
 
   data: () => ({
@@ -73,7 +73,7 @@ export default {
         if (currentPage === this.page && !this.loading && this.page <= this.pages) {
           this.loading = true
           this.page++;
-          this.tenderStore.loadMoreByContractor(this.page, this.pageSize);
+          this.tenderStore.loadMoreByBidder(this.page, this.pageSize);
           this.loading = false
         }
       } catch (error) {
@@ -83,7 +83,7 @@ export default {
   },
 
   mounted() {
-    this.tenderStore.loadByContractor(this.page, this.pageSize);
+    this.tenderStore.loadByBidder(this.page, this.pageSize);
   },
 
   computed: {
