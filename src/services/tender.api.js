@@ -11,8 +11,8 @@ export const save = async (tenderRequest) => {
     return data;
 }
 
-export const countTendersByContractor = async (contractorId) => {
-    const { data } = await axiosApiClient.get(`${URL_CONTRACTOR_COUNT}/${contractorId}`);
+export const countTendersByContractor = async () => {
+    const { data } = await axiosApiClient.get(`${URL_CONTRACTOR_COUNT}`);
     return data;
 }
 

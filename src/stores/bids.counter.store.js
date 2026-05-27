@@ -6,19 +6,19 @@ export const bidsCounter = reactive({
     tenders: 0,
     offers: 0,
 
-    async loadContractorCounts(contractorId) {
+    async loadContractorCounts() {
         const [tenderCountResponse, offerCountResponse] = await Promise.all([
-            countTendersByContractor(contractorId),
-            countOffersByContractor(contractorId)
+            countTendersByContractor(),
+            countOffersByContractor()
         ]);
         this.tenders = tenderCountResponse.count;
         this.offers = offerCountResponse.count;
     },
 
-    async loadBidderCounts(bidderId) {
+    async loadBidderCounts() {
         const [tenderCountResponse, offerCountResponse] = await Promise.all([
             countAllTenders(),
-            countOffersByBidder(bidderId)
+            countOffersByBidder()
         ]);
         this.tenders = tenderCountResponse.count;
         this.offers = offerCountResponse.count;
