@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { save, findTendersByContractor, findTendersByBidder } from '@/services/tender.api';
+import { save, loadContractorTenderDetailsById, loadBidderTenderDetailsById } from '@/services/tender.api';
 
 export const useTenderStore = defineStore('tender', {
     state: () => ({
@@ -15,6 +15,15 @@ export const useTenderStore = defineStore('tender', {
     actions: {
         async save(tenderRequest) {
             this.tender = await save(tenderRequest);
+            return this.tender;
         },
+
+        async loadContractorTenderDetailsById(tenderId) {
+            this.tender = await loadContractorTenderDetailsById(tenderId);
+        },
+
+        async loadBidderTenderDetailsById(tenderId) {
+            this.tender = await loadContractorTenderDetailsById(tenderId);
+        } 
     }
 })
