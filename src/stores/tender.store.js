@@ -3,7 +3,25 @@ import { save, loadContractorTenderDetailsById, loadBidderTenderDetailsById } fr
 
 export const useTenderStore = defineStore('tender', {
     state: () => ({
-        tender: {}
+        tender: {
+            companyProfile: {
+                country: {},
+                contactPerson: {}
+            },
+            procedure: {},
+            cpv: {},
+            awardDecision: {
+                fileMetadata: {}
+            },
+            rejectDecision: {
+                fileMetadata: {}
+            },
+            contract: {
+                currency: {},
+                contractType: {},
+                fileMetadata: {}
+            },
+        },
     }),
 
     getters: {
