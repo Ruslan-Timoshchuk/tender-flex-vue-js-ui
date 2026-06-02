@@ -15,7 +15,7 @@
         </TableHeader>
         <v-container id="scroll-target" style="max-height: 25rem" class="overflow-y-auto"
           v-scroll:#scroll-target="onScroll">
-          <v-sheet v-for="tender in tenderStore.getTenders" :key="tender.id">
+          <v-sheet v-for="tender in tenderPegeableStore.getTenders" :key="tender.id">
             <v-sheet :class="{
               'table-row': tender.tenderStatusName === 'TENDER_IN_PROGRESS',
               'table-row disabled': tender.tenderStatusName === 'TENDER_CLOSED'
@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { useTenderStore } from "@/stores/tender.store"
+import { useTenderPegeableStore } from "@/stores/tender.pageable.store"
 import { navigateToTender } from "@/components/actions"
 import ToolBarTitle from "@/components/childs/ToolBarTitle.vue"
 import EmptyTableTitle from "@/components/childs/EmptyTableTitle.vue"
@@ -57,7 +57,7 @@ export default {
   },
 
   data: () => ({
-    tenderStore: useTenderStore(),
+    tenderPegeableStore: useTenderPegeableStore(),
     loading: false,
     bottom: 285,
     page: 1,
@@ -73,7 +73,7 @@ export default {
         if (currentPage === this.page && !this.loading && this.page <= this.pages) {
           this.loading = true
           this.page++;
-          this.tenderStore.loadMoreByBidder(this.page, this.pageSize);
+          this.tenderPegeableStore.loadMoreByBidder(this.page, this.pageSize);
           this.loading = false
         }
       } catch (error) {
@@ -83,12 +83,12 @@ export default {
   },
 
   mounted() {
-    this.tenderStore.loadByBidder(this.page, this.pageSize);
+    this.tenderPegeableStore.loadByBidder(this.page, this.pageSize);
   },
 
   computed: {
     isTenders() {
-      return this.tenderStore.getTenders.length > 0;
+      return this.tenderPegeableStore.getTenders.length > 0;
     }
   }
 }

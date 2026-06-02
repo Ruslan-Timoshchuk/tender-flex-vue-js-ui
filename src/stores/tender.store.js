@@ -3,40 +3,18 @@ import { save, findTendersByContractor, findTendersByBidder } from '@/services/t
 
 export const useTenderStore = defineStore('tender', {
     state: () => ({
-        tenders: []
+        tender: {}
     }),
 
     getters: {
-        getTenders: (state) => {
-            return state.tenders;
+        getTender: (state) => {
+            return state.tender;
         }
     },
 
     actions: {
         async save(tenderRequest) {
-            const tender = await save(tenderRequest);
-            this.tenders.unshift(tender);
-            return tender;
+            this.tender = await save(tenderRequest);
         },
-
-        async loadByContractor(page, pageSize) {
-            const { content } = await findTendersByContractor(page, pageSize);
-            this.tenders = content;
-        },
-
-        async loadMoreByContractor(page, pageSize) {
-            const { content } = await findTendersByContractor(page, pageSize);
-            this.tenders.push(...content);
-        },
-
-         async loadByBidder(page, pageSize) {
-            const { content } = await findTendersByBidder(page, pageSize);
-            this.tenders = content;
-        },
-
-        async loadMoreByBidder(page, pageSize) {
-            const { content } = await findTendersByBidder(page, pageSize);
-            this.tenders.push(...content);
-        }
     }
 })
