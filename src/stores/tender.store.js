@@ -23,7 +23,7 @@ export const useTenderStore = defineStore('tender', {
         },
 
         async loadBidderTenderDetailsById(tenderId) {
-            this.tender = await loadContractorTenderDetailsById(tenderId);
+            this.tender = await loadBidderTenderDetailsById(tenderId);
         } 
     }
 })
