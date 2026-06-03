@@ -243,8 +243,7 @@ export default {
     },
 
     async save() {
-      try {
-        await this.$router.push({ name: 'contractor-tenders' });
+      try { 
         const { contract, awardDecision, rejectDecision } = this.attachment;
         const [contractFileMetadata, awardFileMetadata, rejectFileMetadata] = await Promise.all([
           this.fileStore.uploadFile(contract),
@@ -266,6 +265,7 @@ export default {
           this.rejectDecisionStore.saveRejectDecision(this.rejectDecision)
         ]);
         this.successAlert.activateAlert("Tender was successfully created");
+        await this.$router.push({ name: 'contractor-tenders' });
       } catch (error) {
         if (error.response && error.response.status === 400) {
           this.exceptionAlert.activateAlert(error.response.data.message);
