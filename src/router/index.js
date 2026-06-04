@@ -3,6 +3,7 @@ import LogIn from '@/components/LogIn.vue'
 import ContractorToolbar from '@/components/toolbar/ContractorToolbar.vue'
 import ContractorTenderDetails from '@/components/tender/ContractorTenderDetails.vue'
 import BidderTenderDetails from '@/components/tender/BidderTenderDetails.vue'
+import BidderOfferDetails from '@/components/offer/BidderOfferDetails.vue'
 import ContractorTenderSummary from '@/components/tender/ContractorTenderSummary.vue'
 import BidderToolbar from '@/components/toolbar/BidderToolbar.vue'
 import BidderTenderSummary from '@/components/tender/BidderTenderSummary.vue'
@@ -29,10 +30,11 @@ const routes = [
   {
     name: 'bidder-module', path: '/bidders', component: BidderToolbar,
     children: [
-      { name: 'new-offer', path: 'send-new-offer', component: Offer },
       { name: 'bidder-tenders', path: 'tenders', component: BidderTenderSummary },
       { name: 'bidder-tender-details', path: 'tenders/:id', component: BidderTenderDetails },
-      { name: 'bidder-offers', path: 'offers', component: OfferList }
+      { name: 'new-offer', path: 'offers/send-new-offer/tender-id/:tenderId', component: Offer },
+      { name: 'bidder-offers', path: 'offers', component: OfferList },
+      { name: 'bidder-offer-details', path: 'offers/:id', component: BidderOfferDetails }
     ]
   },
 
