@@ -83,7 +83,7 @@ export default {
 
     openTenderDetails(tenderId) {
       this.$router.push({
-        name: 'contractor-tender-details',
+        name: 'contractor-tender-description',
         params: {
           id: tenderId
         }

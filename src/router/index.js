@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import LogIn from '@/components/LogIn.vue'
 import ContractorToolbar from '@/components/toolbar/ContractorToolbar.vue'
 import ContractorTenderDetails from '@/components/tender/ContractorTenderDetails.vue'
+import ContractorTenderDescription from '@/components/tender/ContractorTenderDescription.vue'
 import BidderTenderDetails from '@/components/tender/BidderTenderDetails.vue'
 import BidderOfferDetails from '@/components/offer/BidderOfferDetails.vue'
 import ContractorTenderSummary from '@/components/tender/ContractorTenderSummary.vue'
@@ -22,7 +23,8 @@ const routes = [
     children: [
       { name: 'new-tender', path: 'create-new-tender', component: Tender },
       { name: 'contractor-tenders', path: 'tenders', component: ContractorTenderSummary },
-      { name: 'contractor-tender-details', path: 'tenders/:id', component: ContractorTenderDetails },
+      { name: 'contractor-tender-description', path: 'tenders/description/:id', component: ContractorTenderDescription },
+      { name: 'contractor-tender-details', path: 'tenders/details/:id', component: ContractorTenderDetails },
       { name: 'contractor-offers', path: 'offers', component: OfferList }
     ]
   },
