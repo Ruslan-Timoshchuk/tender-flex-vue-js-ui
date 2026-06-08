@@ -13,8 +13,8 @@
           registrationNumberHint="Enter the national registration number of the buyer (e.g.ULG BE 0325 777 171)"
           @update-registration-number="(value) => offer.companyProfile.registrationNumber = value"
           countryHint="Choose the country"
-          :countries="countries"
-          @update-country="(value) => offer.companyProfile.country.id = value"
+          :countries="countryStore.countries"
+          @update-country="(value) => offer.companyProfile.countryId = value"
           cityHint="Enter the city"
           @update-city="(value) => offer.companyProfile.city = value"
           firstNameHint="Enter the name of contact person"
@@ -45,8 +45,8 @@
               hint="Choose the currency"
               label="Currency"
               itemTitle="code"
-              @update-value="(value) => offer.currency.id = value"
-              :items="currencies">
+              @update-value="(value) => offer.currencyId = value"
+              :items="currencyStore.currencies">
             </SelectOptionInput>
           </v-col>
         </v-row>
@@ -78,7 +78,7 @@
         </v-col>
       <v-col md="3">
         <v-btn type="submit" block class="mt-2" variant="flat" color="blue"
-          size="large" @click="createOffer">
+          size="large" @click="save">
           Send Offer
         </v-btn>
       </v-col>
@@ -104,11 +104,12 @@
 </template>
 
 <script>
-import { URL_REST_API } from "@/rest.api.endpoints";
+import { useCountryStore } from '@/stores/country.store';
+import { useCurrencyStore } from '@/stores/currency.store';
+import { useFileStore } from '@/stores/file.store';
+import { useOfferStore } from '@/stores/offer.store';
 import { format } from 'date-fns'
-import { totalStore } from "@/components/actions";
 import { successAlert, exceptionAlert } from "@/components/alerts";
-import { fetchFromEndpoint, uploadFile, createDocumentRecord } from "@/components/actions"
 import ToolBarTitle from "@/components/childs/ToolBarTitle.vue"
 import CompanyProfile from "@/components/childs/CompanyProfile.vue";
 import Chapter from "@/components/childs/Chapter.vue"
@@ -127,63 +128,50 @@ export default {
   },
 
   data: () => ({
-    countries: [],
-    currencies: [],
+    countryStore: useCountryStore(),
+    currencyStore: useCurrencyStore(),
+    fileStore: useFileStore(),
+    offerStore: useOfferStore(),
+    offer: {
+      companyProfile: {
+        contactPerson: {}
+      }
+    },
     currency: {},
     isDisabled: true,
-    offer: {
-      currency: {},
-      companyProfile: {
-        country: {},
-        contactPerson: {}
-      },
-      tender: {},
-      bidPrice: 0,
-      proposition: {},
-    },
     dialog: false,
     isDialog: false,
-    document: null,
-    totalStore,
     successAlert,
     exceptionAlert,
-    proposition: null,
-    fetchFromEndpoint,
-    uploadFile,
-    createDocumentRecord
+    proposition: {},
   }),
 
   methods: {
-    async createOffer() {
-      const offerSubmissionRequest = {
-        tenderId: this.$route.query.tender_id,
-        offer: this.offer
-      };
-      this.$router.push({ name: 'tenders' })
+    async save() {
       try {
-        this.offer.bidderId = this.$route.params.user_id
-        const propositionFileMetadata = await this.uploadFile(this.proposition);
-        this.offer.proposition.id = propositionFileMetadata.data.id;
-        await this.createDocumentRecord(offerSubmissionRequest,
-          URL_REST_API.PROCUREMENTS_SEND_OFFER);
+        const propositionMetadata = await this.fileStore.uploadFile(this.proposition);
+        this.offer.propositionMetadataId = propositionMetadata.id;
+        this.offer.tenderId = this.$route.params.tenderId;
+        this.offer.publication = this.initialDate;
+        this.offerStore.save(this.offer)
         this.successAlert.activateAlert("Offer was successfully created");
-        this.totalStore.refreshTotalCounts(this.$route.params.user_id);
+        this.$router.push({ name: 'bidder-offers' })
       } catch (error) {
-        console.log(error)
         this.exceptionAlert.activateAlert(error);
       }
     }
   },
 
   async mounted() {
-
-    this.offer.publication = format(new Date(), 'yyyy-MM-dd');
-    const [countries, currencies] = await Promise.all([
-        this.fetchFromEndpoint(`${URL_REST_API.HOST}/${URL_REST_API.COUNTRIES_ALL}`),
-        this.fetchFromEndpoint(`${URL_REST_API.HOST}/${URL_REST_API.CURRENCIES_ALL}`),
+    try {
+      await Promise.all([
+        this.countryStore.loadCountries(),
+        this.currencyStore.loadCurrencies(),
       ]);
-      this.countries = countries.data;
-      this.currencies = currencies.data;
+    } catch (error) {
+      this.exceptionAlert.activateAlert("Error occurred when fetching the data: " + error)
+    }
+    this.initialDate = format(new Date(), 'yyyy-MM-dd');
   }
 }
 
