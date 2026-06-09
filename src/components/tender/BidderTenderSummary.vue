@@ -21,7 +21,7 @@
               'table-row disabled': tender.tenderStatusName === 'TENDER_CLOSED'
             }">
               <td class="v-col-4">
-                <div class="cpv-code"><strong @click="openTenderDetails(tender.id)">{{ tender.cpvCode }}</strong>
+                <div class="cpv-code"><strong @click="openTenderDetails(tender)">{{ tender.cpvCode }}</strong>
                 </div>
                 <div class="cpv-text"><strong>{{ tender.fieldOfTheTender }}</strong></div>
               </td>
@@ -81,11 +81,17 @@ export default {
       }
     },
 
-     openTenderDetails(tenderId) {
+    openTenderDetails(tender) {
+      let routeName;
+      if (tender.offerStatusName === 'NOT_SENT') {
+        routeName = 'bidder-tender-details';
+      } else {
+        routeName = 'bidder-offer-details';
+      }
       this.$router.push({
-        name: 'bidder-tender-details',
+        name: routeName,
         params: {
-          id: tenderId
+          id: tender.id
         }
       });
     }
