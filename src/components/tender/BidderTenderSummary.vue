@@ -91,7 +91,7 @@ export default {
       this.$router.push({
         name: routeName,
         params: {
-          id: tender.id
+          tenderId: tender.id
         }
       });
     }

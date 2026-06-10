@@ -33,10 +33,10 @@ const routes = [
     name: 'bidder-module', path: '/bidders', component: BidderToolbar,
     children: [
       { name: 'bidder-tenders', path: 'tenders', component: BidderTenderSummary },
-      { name: 'bidder-tender-details', path: 'tenders/:id', component: BidderTenderDetails },
+      { name: 'bidder-tender-details', path: 'tenders/:tenderId', component: BidderTenderDetails },
       { name: 'new-offer', path: 'offers/send-new-offer/tender-id/:tenderId', component: Offer },
       { name: 'bidder-offers', path: 'offers', component: OfferList },
-      { name: 'bidder-offer-details', path: 'offers/:id', component: BidderOfferDetails }
+      { name: 'bidder-offer-details', path: 'offers/:tenderId', component: BidderOfferDetails }
     ]
   },
 

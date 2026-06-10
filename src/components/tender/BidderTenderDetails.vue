@@ -27,7 +27,7 @@
   <v-row class="d-flex justify-end mt-5 mb-10">
     <v-col md="2" style="margin-right: 20rem;">
       <v-btn type="submit" block variant="flat" color="blue"
-        :to="{ name: 'new-offer', params: { tenderId: $route.params.id } }">
+        :to="{ name: 'new-offer', params: { tenderId: $route.params.tenderId } }">
         + Create Offer
       </v-btn>
     </v-col>
@@ -86,7 +86,7 @@ export default {
   },
 
   async mounted() {
-    this.tenderStore.loadBidderTenderDetailsById(this.$route.params.id);
+    this.tenderStore.loadBidderTenderDetailsById(this.$route.params.tenderId);
   }
 }
 </script>
