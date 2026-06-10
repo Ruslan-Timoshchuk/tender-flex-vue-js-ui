@@ -15,7 +15,7 @@
         </TableHeader>
         <v-container id="scroll-target" style="max-height: 25rem" class="overflow-y-auto"
           v-scroll:#scroll-target="onScroll">
-          <v-sheet v-for="tender in tenderPegeableStore.getTenders" :key="tender.id">
+          <v-sheet v-for="tender in tenderPegeableStore.getTenders" :key="tender.id">       
             <v-sheet :class="{
               'table-row': tender.tenderStatusName === 'TENDER_IN_PROGRESS',
               'table-row disabled': tender.tenderStatusName === 'TENDER_CLOSED'
@@ -28,7 +28,7 @@
               <td class="v-col-2 text-center">{{ tender.contractorName }}</td>
               <td class="v-col-2 text-center">{{ tender.tenderStatusLabel }}</td>
               <td class="v-col-2 text-center">{{ tender.offerSubmissionDeadline }}</td>
-              <td class="v-col-2 ml-6 text-left">{{ tender.offerStatusLabel }}</td>
+              <td class="v-col-2 ml-6 text-left">{{ tender.offerStatusLabel }}</td>    
             </v-sheet>
           </v-sheet>
         </v-container>
@@ -37,6 +37,10 @@
         v-else message="“There are no available Tenders.”">
       </EmptyTableTitle>
     </v-card>
+    <v-snackbar v-model="offerSubmissionInfo" :timeout="3000" color="blue-grey" rounded="pill">
+      An offer has already been submitted for this tender.
+      For detailed information, please go to the Offers tab.
+    </v-snackbar>
   </v-container>
 
   <router-view />
@@ -57,6 +61,7 @@ export default {
   },
 
   data: () => ({
+    offerSubmissionInfo: false,
     tenderPegeableStore: useTenderPegeableStore(),
     loading: false,
     bottom: 285,
@@ -82,18 +87,16 @@ export default {
     },
 
     openTenderDetails(tender) {
-      let routeName;
       if (tender.offerStatusName === 'NOT_SENT') {
-        routeName = 'bidder-tender-details';
+        this.$router.push({
+          name: 'bidder-tender-details',
+          params: {
+            tenderId: tender.id
+          }
+        });
       } else {
-        routeName = 'bidder-offer-details';
+        this.offerSubmissionInfo = true;
       }
-      this.$router.push({
-        name: routeName,
-        params: {
-          tenderId: tender.id
-        }
-      });
     }
   },
 
