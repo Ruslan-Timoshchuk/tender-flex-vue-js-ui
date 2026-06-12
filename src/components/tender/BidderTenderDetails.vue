@@ -12,6 +12,7 @@
     </template>
   </v-toolbar>
 
+  <div class="mt-n8 mb-12">
   <TenderDetails 
     :tender="tenderStore.tender">
     <template #documents>
@@ -24,7 +25,7 @@
       </v-row>
     </template>
   </TenderDetails>
-  <v-row class="d-flex justify-end mt-5 mb-10">
+  <v-row class="d-flex justify-end mt-5">
     <v-col md="2" style="margin-right: 20rem;">
       <v-btn type="submit" block variant="flat" color="blue"
         :to="{ name: 'new-offer', params: { tenderId: $route.params.tenderId } }">
@@ -32,7 +33,7 @@
       </v-btn>
     </v-col>
   </v-row>
-
+</div>
   <FileViewerModal 
     v-model:isOpen="isOpen" 
     @update:isOpen="closeFile" 
@@ -42,6 +43,7 @@
 
 <script>
 import { useTenderStore } from "@/stores/tender.store";
+import { useOfferStore } from "@/stores/offer.store";
 import { useFileStore } from "@/stores/file.store";
 import { exceptionAlert } from "@/components/alerts";
 import FileVchip from "@/components/childs/FileVchip.vue"
@@ -57,6 +59,7 @@ export default {
 
   data: () => ({
     tenderStore: useTenderStore(),
+    offerStore: useOfferStore(),
     fileStore: useFileStore(),
     isOpen: false,
     fileUrl: '',
