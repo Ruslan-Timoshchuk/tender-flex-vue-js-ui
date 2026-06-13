@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto mt-n8" elevation="8" max-width="1000">
+  <v-card class="mx-auto" elevation="8" max-width="1000">
     <v-toolbar color="white" height="240" class="text-left">
       <v-container class="pa-15">
         <v-toolbar-title class="mb-5">Contractor</v-toolbar-title>

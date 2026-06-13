@@ -19,8 +19,8 @@ export const countOffersByContractor = async () => {
     return data;
 }
 
-export const findOffersByTender = async (tenderId, page, pageSize) => {
+export const findOffersByTender = async (tenderId, requestedPage, pageSize) => {
     const { data } = await axiosApiClient
-        .get(`${URL_TENDER_OFFERS_PAGE}/${tenderId}?page=${page}&pageSize=${pageSize}`);
+        .get(`${URL_TENDER_OFFERS_PAGE}/${tenderId}?requestedPage=${requestedPage}&pageSize=${pageSize}`);
     return data;
 }
