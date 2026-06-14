@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { save } from "@/services/offer.api";
+import { save, findContractorOfferDetailsById } from "@/services/offer.api";
 
 export const useOfferStore = defineStore('offer', {
     state: () => ({
@@ -24,7 +24,10 @@ export const useOfferStore = defineStore('offer', {
     actions: {
         async save(offerRequest) {
             this.offer = await save(offerRequest);
-            return this.offer;
         },
+
+        async loadContractorOfferDetailsById(offerId) {
+            this.offer = await findContractorOfferDetailsById(offerId);
+        }
     }
 })
