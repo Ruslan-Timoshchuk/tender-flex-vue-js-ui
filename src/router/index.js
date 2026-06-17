@@ -13,6 +13,7 @@ import BidDetails from '@/components/BidDetails.vue'
 import Offer from '@/components/offer/Offer.vue'
 import OfferList from '@/components/offer/OfferList.vue'
 import { RouterView } from 'vue-router'
+import ContractorOfferDecisionActions from '@/components/offer/ContractorOfferDecisionActions.vue'
 
 const routes = [
 
@@ -25,7 +26,10 @@ const routes = [
       { name: 'contractor-tenders', path: 'tenders', component: ContractorTenderSummary },
       { name: 'contractor-tender-description', path: 'tenders/description/:id', component: ContractorTenderDescription },
       { name: 'contractor-tender-details', path: 'tenders/details/:id', component: ContractorTenderDetails },
-      { name: 'contractor-offers', path: 'offers', component: OfferList }
+      { name: 'contractor-offers', path: 'offers', component: OfferList },
+      { name: 'contractor-offer-decision-actions', 
+        path: 'offers/offer-id/:offerId/decisions/:awardDecisionId/:rejectDecisionId', 
+        component: ContractorOfferDecisionActions }
     ]
   },
 

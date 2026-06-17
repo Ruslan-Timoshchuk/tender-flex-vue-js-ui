@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { save } from '@/services/reject.decision.api'
+import { save, applyRejectDecision } from '@/services/reject.decision.api'
 
 export const useRejectDecisionStore = defineStore('reject-decision', {
     state: () => ({}),
@@ -7,6 +7,11 @@ export const useRejectDecisionStore = defineStore('reject-decision', {
     actions: {
         async saveRejectDecision(rejectDecisionRequest) {
             return await save(rejectDecisionRequest);
+        },
+
+        async sendRejectDecision(rejectOfferDecisionRequest) {
+          return await applyRejectDecision(rejectOfferDecisionRequest);
         }
     }
+    
 })
