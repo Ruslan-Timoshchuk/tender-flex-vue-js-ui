@@ -86,7 +86,7 @@ export default {
       if (tender.offersAmount === 0) {
         urlPathName = 'contractor-tender-description';
       } else {
-        urlPathName = 'contractor-tender-details'
+        urlPathName = 'contractor-tender-offers-section'
       }
       this.$router.push({
         name: urlPathName,

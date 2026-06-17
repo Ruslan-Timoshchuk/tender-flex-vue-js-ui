@@ -17,8 +17,8 @@
             ><v-toolbar-title 
               class="ml-14 mb-4" 
               style="font-size: 1.5rem"
-            >{{ tenderStore.tender.cpv.summary }} 
-             ({{ tenderStore.tender.cpv.code }})
+            >{{ tenderStore.getTender.cpv.summary }} 
+             ({{ tenderStore.getTender.cpv.code }})
             </v-toolbar-title>
           <v-btn 
             rounded="0" 
@@ -35,6 +35,7 @@
     </template>
   </v-toolbar>
 
+  <div class="mt-n8 mb-12">
      <TenderDetails 
        :tender="tenderStore.tender"
        ><template #documents>
@@ -61,6 +62,7 @@
          </v-row>
        </template>
      </TenderDetails>
+  </div>
 
     <FileViewerModal
       v-model:isOpen="isOpen"

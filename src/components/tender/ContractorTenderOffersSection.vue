@@ -28,7 +28,7 @@
           v-scroll:#scroll-target="onScroll">
           <v-sheet v-for="offer in offerPegeableStore.getOffers" :key="offer.id">
             <v-sheet class="table-row">
-              <strong class="cpv-code" @click="navigateToOffer(offer.id)">{{ offer.bidderOfficialName
+              <strong class="cpv-code" @click="navigateToOffer(offer)">{{ offer.bidderOfficialName
               }}</strong>
               <td style="width: 10rem;">{{ `${offer.currencyCode}.${offer.bidPrice}` }}</td>
               <td style="width: 10rem;">{{ offer.countryName }}</td>
@@ -84,14 +84,12 @@ import { exceptionAlert } from "@/components/alerts";
 import TenderDetails from "@/components/tender/childs/TenderDetails.vue";
 import FileVchip from "@/components/childs/FileVchip.vue"
 import FileViewerModal from "@/components/childs/FileViewerModal.vue"
-import TableHeaderWithoutField from "@/components/offer/childs/TableHeaderWithoutField.vue"
 
 export default {
   components: {
     TenderDetails,
     FileVchip,
-    FileViewerModal,
-    TableHeaderWithoutField
+    FileViewerModal
   },
 
   data: () => ({
@@ -148,14 +146,45 @@ export default {
           this.fileUrl = null;
         }
         this.isOpen = false;
+      },
+
+    navigateToOffer(offer) {
+      const tender = this.tenderStore.getTender;
+      const isOfferReceived = offer.offerStatusName === 'OFFER_RECEIVED';
+      const isDraftContract = tender.contract.status === 'DRAFT';
+      let routeConfig;
+      if (isOfferReceived && isDraftContract) {
+        routeConfig = {
+          name: 'contractor-offer-decision-actions',
+          params: {
+            offerId: offer.offerId,
+            awardDecisionId: this.tenderStore.getTender.awardDecision.id,
+            rejectDecisionId: this.tenderStore.getTender.rejectDecision.id
+          }
+        }
+      } else {
+        routeConfig = {
+          name: 'contractor-offer-details',
+          params: {
+            id: offer.offerId
+          }
+        }
       }
+      this.$router.push(routeConfig);
+    }
+
+  },
+
+  computed: {
+    tenderId() {
+      return Number(this.$route.params.id);
+    }
   },
 
   async mounted() {
-    const tenderId = this.$route.params.id;
-    this.tenderStore.loadContractorTenderDetailsById(tenderId);
+    this.tenderStore.loadContractorTenderDetailsById(this.tenderId);
     const requestedPage = this.offerPegeableStore.getCurrentPage;
-    this.offerPegeableStore.loadOffersByTender(tenderId, requestedPage, this.pageSize);
+    this.offerPegeableStore.loadOffersByTender(this.tenderId, requestedPage, this.pageSize);
   }
 }
 </script>
