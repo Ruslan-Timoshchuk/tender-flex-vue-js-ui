@@ -42,7 +42,6 @@
             Send Reject Decision
         </v-btn>
         <v-btn class="mx-2" variant="flat" color="blue" @click="sendAwardDecision({
-            contractId: contract.id,
             offerId: offerId,
             awardId: awardDecisionId
         })">Send Award Decision
@@ -64,6 +63,7 @@ import FileViewerModal from "@/components/childs/FileViewerModal.vue"
 import { useOfferStore } from '@/stores/offer.store';
 import { useFileStore } from '@/stores/file.store';
 import { useRejectDecisionStore } from '@/stores/reject.decision.store';
+import { useAwardDecisionStore } from '@/stores/award.decision.store';
 import {exceptionAlert } from "@/components/alerts"
 
 export default {
@@ -77,6 +77,7 @@ export default {
         offerStore: useOfferStore(),
         fileStore: useFileStore(),
         rejectDecisionStore: useRejectDecisionStore(),
+        awardDecisionStore: useAwardDecisionStore(),
         fileUrl: '',
         isOpen: false,
         exceptionAlert
@@ -105,7 +106,12 @@ export default {
 
         async sendRejectDecision(rejectOfferDecisionRequest) {
             await this.rejectDecisionStore.sendRejectDecision(rejectOfferDecisionRequest);
+        },
+
+        async sendAwardDecision(awardOfferDecisionRequest) {
+            await this.awardDecisionStore.sendAwardDecision(awardOfferDecisionRequest);
         }
+
     },
 
     computed: {
