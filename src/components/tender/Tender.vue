@@ -48,7 +48,7 @@
                 hint="Choose the type of contract"
                 label="Type"
                 itemTitle="title"
-                @update-value="(value) => contract.contractTypeId = value"
+                @update-value="(value) => tender.contract.contractTypeId = value"
                 :items="contractTypeStore.contractTypes">
               </SelectOptionInput>
             </v-col>
@@ -65,7 +65,7 @@
               <NumericInput
                 title="Maximum Tender Value"
                 hint="Enter maximum price of the Tender contract"
-                @update-value="(value) => contract.maxPrice = value"
+                @update-value="(value) => tender.contract.maxPrice = value"
                 :counter="8"
                 label="Maximum tender value"
               ></NumericInput>
@@ -74,7 +74,7 @@
               <NumericInput
                 title="Minimum Tender Value"
                 hint="Enter minimum price of the Tender contract"
-                @update-value="value => contract.minPrice = value"
+                @update-value="value => tender.contract.minPrice = value"
                 :counter="8"
                 label="Minimum tender value"
               ></NumericInput>
@@ -85,7 +85,7 @@
                 hint="Choose the currency"
                 label="Currency"
                 itemTitle="code"
-                @update-value="(value) => contract.currencyId = value"
+                @update-value="(value) => tender.contract.currencyId = value"
                 :items="currencyStore.currencies">
               </SelectOptionInput>
             </v-col>
@@ -118,7 +118,7 @@
               title="Deadline for Signing"
               hint="Choose the deadline date for signed contract submission"
               :earliestDate="earliestDeadline"
-               @update-value="(value) => contract.signedDeadline = value"
+               @update-value="(value) => tender.contract.signedDeadline = value"
             ></DateInput>
           </v-col>
           </v-row>
@@ -178,9 +178,6 @@ import { useCpvStore } from "@/stores/cpv.store"
 import { useContractTypeStore } from "@/stores/contract.type.store"
 import { useCurrencyStore } from "@/stores/currency.store"
 import { useTenderStore } from "@/stores/tender.store"
-import { useContractStore } from '@/stores/contract.store'
-import { useAwardDecisionStore } from '@/stores/award.decision.store'
-import { useRejectDecisionStore } from '@/stores/reject.decision.store'
 import { successAlert, exceptionAlert } from "@/components/alerts"
 import TextInput from "@/components/childs/TextInput.vue"
 import NumericInput from "@/components/childs/NumericInput.vue"
@@ -214,20 +211,17 @@ export default {
     currencyStore: useCurrencyStore(),
     tenderStore: useTenderStore(),
     fileStore: useFileStore(),
-    contractStore: useContractStore(),
-    awardDecisionStore: useAwardDecisionStore(),
-    rejectDecisionStore: useRejectDecisionStore(),
     earliestDeadline: null,
     isDisabled: true,
     initialDate: null,
     tender: {
       companyProfile: {
         contactPerson: {}
-      }
+      },
+      contract: {},
+      awardDecision: {},
+      rejectDecision: {},
     },
-    contract: {},
-    awardDecision: {},
-    rejectDecision: {},
     valid: false,
     attachment: {},
     successAlert,
@@ -243,28 +237,19 @@ export default {
     },
 
     async save() {
-      try { 
+      try {
         const { contract, awardDecision, rejectDecision } = this.attachment;
-        const [contractFileMetadata, awardFileMetadata, rejectFileMetadata] = await Promise.all([
+        const [contractFile, awardFile, rejectFile] = await Promise.all([
           this.fileStore.uploadFile(contract),
           this.fileStore.uploadFile(awardDecision),
           this.fileStore.uploadFile(rejectDecision),
         ]);
         this.tender.publication = this.initialDate;
-        const tender = await this.tenderStore.save(this.tender);
-        const tenderId = tender.id;
-        this.contract.tenderId = tenderId;
-        this.contract.fileMetadataId = contractFileMetadata.id;
-        this.awardDecision.tenderId = tenderId;
-        this.awardDecision.fileMetadataId = awardFileMetadata.id;
-        this.rejectDecision.tenderId = tenderId;
-        this.rejectDecision.fileMetadataId = rejectFileMetadata.id;
-        await Promise.all([
-          this.contractStore.saveContract(this.contract),
-          this.awardDecisionStore.saveAwardDecision(this.awardDecision),
-          this.rejectDecisionStore.saveRejectDecision(this.rejectDecision)
-        ]);
-        this.successAlert.activateAlert("Tender was successfully created");
+        this.tender.contract.fileMetadataId = contractFile.id;
+        this.tender.awardDecision.fileMetadataId = awardFile.id;
+        this.tender.rejectDecision.fileMetadataId = rejectFile.id;
+        await this.tenderStore.save(this.tender);
+        this.successAlert.activateAlert("Tender and all related structures were successfully created");
         await this.$router.push({ name: 'contractor-tenders' });
       } catch (error) {
         if (error.response && error.response.status === 400) {
