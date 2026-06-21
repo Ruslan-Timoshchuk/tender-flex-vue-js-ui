@@ -43,7 +43,7 @@
         </v-btn>
         <v-btn class="mx-2" variant="flat" color="blue" @click="sendAwardDecision({
             offerId: offerId,
-            awardId: awardDecisionId
+            awardDecisionId: awardDecisionId
         })">Send Award Decision
         </v-btn>
     </v-container>
