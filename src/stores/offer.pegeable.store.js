@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { findOffersByTender } from "@/services/offer.api";
+import { findOffersByTender, findOffersByContractor } from "@/services/offer.api";
 
 export const useOfferPegeableStore = defineStore('offer-pegeable', {
     state: () => ({
@@ -32,6 +32,20 @@ export const useOfferPegeableStore = defineStore('offer-pegeable', {
 
         async loadMoreOffersByTender(tenderId, requestedPage, pageSize) {
             const { currentPage, totalPages, content } = await findOffersByTender(tenderId, requestedPage, pageSize);
+            this.currentPage = currentPage;
+            this.totalPages = totalPages;
+            this.tenders.push(...content);
+        },
+
+         async loadOffersByContractor(requestedPage, pageSize) {
+            const { currentPage, totalPages, content } = await findOffersByContractor(requestedPage, pageSize);
+            this.currentPage = currentPage;
+            this.totalPages = totalPages;
+            this.offers = content;
+        },
+
+         async loadMoreOffersByContractor(requestedPage, pageSize) {
+            const { currentPage, totalPages, content } = await findOffersByContractor(requestedPage, pageSize);
             this.currentPage = currentPage;
             this.totalPages = totalPages;
             this.tenders.push(...content);

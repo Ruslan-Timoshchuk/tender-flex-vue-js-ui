@@ -12,6 +12,7 @@ import Tender from '@/components/tender/Tender.vue'
 import BidDetails from '@/components/BidDetails.vue'
 import Offer from '@/components/offer/Offer.vue'
 import OfferList from '@/components/offer/OfferList.vue'
+import ContractorOfferSummary from '@/components/offer/ContractorOfferSummary.vue'
 import { RouterView } from 'vue-router'
 import ContractorOfferDecisionActions from '@/components/offer/ContractorOfferDecisionActions.vue'
 import ContractorOfferDetails from '@/components/offer/ContractorOfferDetails.vue'
@@ -27,7 +28,7 @@ const routes = [
       { name: 'contractor-tenders', path: 'tenders', component: ContractorTenderSummary },
       { name: 'contractor-tender-description', path: 'tenders/description/:id', component: ContractorTenderDescription },
       { name: 'contractor-tender-offers-section', path: 'tenders/details/:id', component: ContractorTenderOffersSection },
-      { name: 'contractor-offers', path: 'offers', component: OfferList },
+      { name: 'contractor-offers', path: 'offers', component: ContractorOfferSummary },
       { name: 'contractor-offer-details', path: 'offers/:id', component: ContractorOfferDetails },
       { name: 'contractor-offer-decision-actions', 
         path: 'offers/offer-id/:offerId/decisions/:awardDecisionId/:rejectDecisionId', 
