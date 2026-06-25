@@ -3,21 +3,25 @@ import { findOffersByTender, findOffersByContractor } from "@/services/offer.api
 
 export const useOfferPegeableStore = defineStore('offer-pegeable', {
     state: () => ({
-        currentPage: 0,
-        totalPages: 0,
-        offers: []
+        page: 0,
+        pages: 0,
+        items: []
     }),
 
     getters: {
-        getOffers: (state) => {
-            return state.offers;
+        isEmpty: (state) => { 
+            return state.items.length === 0;
         },
 
-        getCurrentPage: (state) => {
-            return state.currentPage;
+        offers: (state) => {
+            return state.items;
         },
 
-        getTotalPages: (state) => {
+        currentPage: (state) => {
+            return state.page;
+        },
+
+        totalPages: (state) => {
             return state.pages;
         }
     },
@@ -25,29 +29,29 @@ export const useOfferPegeableStore = defineStore('offer-pegeable', {
     actions: {
         async loadOffersByTender(tenderId, requestedPage, pageSize) {
             const { currentPage, totalPages, content } = await findOffersByTender(tenderId, requestedPage, pageSize);
-            this.currentPage = currentPage;
-            this.totalPages = totalPages;
-            this.offers = content;
+            this.page = currentPage;
+            this.pages = totalPages;
+            this.items = content;
         },
 
         async loadMoreOffersByTender(tenderId, requestedPage, pageSize) {
             const { currentPage, totalPages, content } = await findOffersByTender(tenderId, requestedPage, pageSize);
-            this.currentPage = currentPage;
-            this.totalPages = totalPages;
+            this.page = currentPage;
+            this.pages = totalPages;
             this.tenders.push(...content);
         },
 
          async loadOffersByContractor(requestedPage, pageSize) {
             const { currentPage, totalPages, content } = await findOffersByContractor(requestedPage, pageSize);
-            this.currentPage = currentPage;
-            this.totalPages = totalPages;
-            this.offers = content;
+            this.page = currentPage;
+            this.pages = totalPages;
+            this.items = content;
         },
 
          async loadMoreOffersByContractor(requestedPage, pageSize) {
             const { currentPage, totalPages, content } = await findOffersByContractor(requestedPage, pageSize);
-            this.currentPage = currentPage;
-            this.totalPages = totalPages;
+            this.page = currentPage;
+            this.pages = totalPages;
             this.tenders.push(...content);
         },
     }
