@@ -30,7 +30,7 @@
 <script>
 import ToolBarTitle from "@/components/childs/ToolBarTitle.vue"
 import EmptyTableTitle from "@/components/childs/EmptyTableTitle.vue"
-import OfferSummaryTable from "@/components/offer/childs/OfferSummaryTable.vue"
+import OffersSummaryTable from "@/components/offer/childs/OffersSummaryTable.vue"
 import { useContractorOffersStore } from "@/stores/offer.contractor.pegeable.store"
 import { exceptionAlert } from "@/components/alerts";
 
@@ -38,7 +38,7 @@ export default {
   components:{
     ToolBarTitle,
     EmptyTableTitle,
-    OfferSummaryTable,
+    OffersSummaryTable,
   },
 
   data: () => ({
