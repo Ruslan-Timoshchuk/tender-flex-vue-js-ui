@@ -6,6 +6,7 @@ const URL_BIDDER_COUNT = 'api/v1/offers/bidder-count';
 const URL_CONTRACTOR_COUNT = 'api/v1/offers/contractor-count';
 const URL_TENDER_OFFERS_PAGE = 'api/v1/offers/tender-page';
 const URL_CONTRACTOR_OFFERS_PAGE = 'api/v1/offers/contractor-page';
+const URL_BIDDER_OFFERS_PAGE = 'api/v1/offers/bidder-page';
 
 export const save = async (offerRequest) => {
     await axiosApiClient.post(`${URL_OFFERS}`, offerRequest);
@@ -35,5 +36,11 @@ export const findContractorOfferDetailsById = async (offerId) => {
 export const findOffersByContractor = async (requestedPage, pageSize) => {
     const { data } = await axiosApiClient
         .get(`${URL_CONTRACTOR_OFFERS_PAGE}?requestedPage=${requestedPage}&pageSize=${pageSize}`);
+    return data;
+}
+
+export const findOffersByBidder = async (requestedPage, pageSize) => {
+    const { data } = await axiosApiClient
+        .get(`${URL_BIDDER_OFFERS_PAGE}?requestedPage=${requestedPage}&pageSize=${pageSize}`);
     return data;
 }
