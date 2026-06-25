@@ -17,26 +17,11 @@
   <v-window v-model="tab" class="mt-n8 pb-10">
     <v-window-item value="offers">
       <v-card elevation="8" width="1000" class="mx-auto">
-        <v-toolbar class="table-header toolbar">
-          <v-col class="v-col-3 mx-3">Oficial Name</v-col>
-          <v-col class="v-col-1 mx-3">Price</v-col>
-          <v-col class="v-col-1 mx-15">Country</v-col>
-          <v-col class="v-col-2 ml-4">Received Date</v-col>
-          <v-col class="v-col-2">Status</v-col>
-        </v-toolbar>
-        <v-container id="scroll-target" style="max-height: 25rem" class="overflow-y-auto"
-          v-scroll:#scroll-target="onScroll">
-          <v-sheet v-for="offer in offerPegeableStore.getOffers" :key="offer.id">
-            <v-sheet class="table-row">
-              <strong class="cpv-code" @click="navigateToOffer(offer)">{{ offer.bidderOfficialName
-              }}</strong>
-              <td style="width: 10rem;">{{ `${offer.currencyCode}.${offer.bidPrice}` }}</td>
-              <td style="width: 10rem;">{{ offer.countryName }}</td>
-              <td style="width: 10rem;">{{ offer.submissionDate }}</td>
-              <td style="width: 10rem;"> {{ offer.offerStatusLabel }} </td>
-            </v-sheet>
-          </v-sheet>
-        </v-container>
+        <TenderOffersSummaryTable
+          :offers="tenderOffersStore.offers"
+          @load-more-on-scroll="loadMoreByTender"
+          @select-offer="(offer) => navigateToOffer(offer)"
+        ></TenderOffersSummaryTable>
       </v-card>
     </v-window-item>
 
@@ -78,15 +63,17 @@
 
 <script>
 import { useTenderStore } from "@/stores/tender.store"
-import { useOfferPegeableStore } from "@/stores/offer.pegeable.store";
+import { useTenderOffersStore } from "@/stores/offer.tender.pegeable.store";
 import { useFileStore } from "@/stores/file.store";
 import { exceptionAlert } from "@/components/alerts";
 import TenderDetails from "@/components/tender/childs/TenderDetails.vue";
 import FileVchip from "@/components/childs/FileVchip.vue"
 import FileViewerModal from "@/components/childs/FileViewerModal.vue"
+import TenderOffersSummaryTable from "../offer/childs/TenderOffersSummaryTable.vue";
 
 export default {
   components: {
+    TenderOffersSummaryTable,
     TenderDetails,
     FileVchip,
     FileViewerModal
@@ -94,7 +81,7 @@ export default {
 
   data: () => ({
     tenderStore: useTenderStore(),
-    offerPegeableStore: useOfferPegeableStore(),
+    tenderOffersStore: useTenderOffersStore(),
     fileStore: useFileStore(),
     tab: "tenderDescription",
     isOpen: false,
@@ -106,16 +93,16 @@ export default {
   }),
 
   methods: {
-    async onScroll(e) {
+    async loadMoreByTender(e) {
       try {
-        const page = this.offerPegeableStore.getCurrentPage;
-        const pages = this.offerPegeableStore.getTotalPages;
+        const page = this.tenderOffersStore.currentPage;
+        const pages = this.tenderOffersStore.totalPages;
         const el = e.target;
         const nearBottom =
           el.scrollHeight - el.scrollTop <= el.clientHeight + 100;
         if (nearBottom && !this.loading && page < pages) {
           this.loading = true;
-          await this.offerPegeableStore.loadMoreOffersByTender(
+          await this.tenderOffersStore.loadMoreOffersByTender(
             this.$route.params.id,
             page + 1,
             this.pageSize
@@ -183,8 +170,8 @@ export default {
 
   async mounted() {
     this.tenderStore.loadContractorTenderDetailsById(this.tenderId);
-    const requestedPage = this.offerPegeableStore.getCurrentPage;
-    this.offerPegeableStore.loadOffersByTender(this.tenderId, requestedPage, this.pageSize);
+    const requestedPage = this.tenderOffersStore.currentPage;
+    this.tenderOffersStore.loadOffersByTender(this.tenderId, requestedPage, this.pageSize);
   }
 }
 </script>

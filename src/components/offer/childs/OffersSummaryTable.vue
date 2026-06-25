@@ -27,7 +27,6 @@
 </template>
 
 <script>
-
 export default {
   props: {
     companyName: { type: String, default: '' },
