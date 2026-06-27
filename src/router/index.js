@@ -9,9 +9,8 @@ import ContractorTenderSummary from '@/components/tender/ContractorTenderSummary
 import BidderToolbar from '@/components/toolbar/BidderToolbar.vue'
 import BidderTenderSummary from '@/components/tender/BidderTenderSummary.vue'
 import Tender from '@/components/tender/Tender.vue'
-import BidDetails from '@/components/BidDetails.vue'
 import Offer from '@/components/offer/Offer.vue'
-import OfferList from '@/components/offer/OfferList.vue'
+import BidderOfferSummary from '@/components/offer/BidderOfferSummary.vue'
 import ContractorOfferSummary from '@/components/offer/ContractorOfferSummary.vue'
 import { RouterView } from 'vue-router'
 import ContractorOfferDecisionActions from '@/components/offer/ContractorOfferDecisionActions.vue'
@@ -42,24 +41,12 @@ const routes = [
       { name: 'bidder-tenders', path: 'tenders', component: BidderTenderSummary },
       { name: 'bidder-tender-details', path: 'tenders/:tenderId', component: BidderTenderDetails },
       { name: 'new-offer', path: 'offers/send-new-offer/tender-id/:tenderId', component: Offer },
-      { name: 'bidder-offers', path: 'offers', component: OfferList },
+      { name: 'bidder-offers', path: 'offers', component: BidderOfferSummary },
       { name: 'bidder-offer-details', path: 'offers/:tenderId', component: BidderOfferDetails }
     ]
   },
 
   { name: 'administrator-module', path:'/administrators', component: RouterView },
-
-  {
-    name: 'user-module', path: '/users', component: RouterView,
-    children: [
-      {
-        path: 'bids', component: RouterView,
-        children: [
-          { name: 'bid-details', path: 'details', component: BidDetails },
-        ]
-      }
-    ],
-  }
 
 ]
 const router = createRouter({
