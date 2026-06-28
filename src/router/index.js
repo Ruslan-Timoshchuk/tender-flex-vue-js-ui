@@ -42,7 +42,7 @@ const routes = [
       { name: 'bidder-tender-details', path: 'tenders/:tenderId', component: BidderTenderDetails },
       { name: 'new-offer', path: 'offers/send-new-offer/tender-id/:tenderId', component: Offer },
       { name: 'bidder-offers', path: 'offers', component: BidderOfferSummary },
-      { name: 'bidder-offer-details', path: 'offers/:tenderId', component: BidderOfferDetails }
+      { name: 'bidder-offer-details', path: 'offers/details/offer-id/:offerId/tender-id/:tenderId', component: BidderOfferDetails }
     ]
   },
 

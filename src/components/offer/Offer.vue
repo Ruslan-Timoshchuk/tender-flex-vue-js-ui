@@ -151,7 +151,7 @@ export default {
       try {
         const propositionMetadata = await this.fileStore.uploadFile(this.proposition);
         this.offer.propositionMetadataId = propositionMetadata.id;
-        this.offer.tenderId = this.$route.params.tenderId;
+        this.offer.tenderId = this.tenderId;
         this.offer.publication = this.initialDate;
         this.offerStore.save(this.offer)
         this.successAlert.activateAlert("Offer was successfully created");
@@ -159,6 +159,12 @@ export default {
       } catch (error) {
         this.exceptionAlert.activateAlert(error);
       }
+    }
+  },
+
+  computed: {
+    tenderId() {
+      return this.$route.params.tenderId;
     }
   },
 

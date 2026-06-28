@@ -19,8 +19,8 @@
         date="Sent Date"
         status="Status"
         :offers="bidderOffersStore.offers"
-        @load-more-on-scroll="loadMoreByBidder"
-        @select-offer="(offer) => {}"
+        @load-more-on-scroll="loadMoreOnScroll"
+        @select-offer="(offer) => openOfferDetails(offer)"
       ></OffersSummaryTable>
       
     </div>
@@ -49,8 +49,35 @@ export default {
       exceptionAlert
   }),
 
+  methods: {
+    async loadMoreOnScroll(value) {
+      try {
+        const target = value.target;
+        const scrollPosition = target.scrollTop + target.clientHeight;
+        const isBottomReached = scrollPosition >= target.scrollHeight - 50;
+        const currentPage = this.bidderOffersStore.currentPage;
+        const totalPages = this.bidderOffersStore.totalPages;
+        if (isBottomReached && !this.loading && currentPage < totalPages) {
+          this.loading = true;
+          const nextPage = currentPage + 1;
+          await this.bidderOffersStore.loadMoreOffers(nextPage, this.pageSize);
+          this.loading = false;
+        }
+      } catch (error) {
+        this.loading = false;
+        this.exceptionAlert.activateAlert(error);
+      }
+    },
+
+    openOfferDetails(offer) {
+      this.$router.push({ 
+        name: "bidder-offer-details", 
+        params: { offerId: offer.offerId, tenderId: tenderId } });
+    }
+  },
+
   async mounted() {
-    await this.bidderOffersStore.loadOffersByBidder(this.bidderOffersStore.currentPage, this.pageSize);
+    await this.bidderOffersStore.loadOffers(this.bidderOffersStore.currentPage, this.pageSize);
   }
 }
 </script>

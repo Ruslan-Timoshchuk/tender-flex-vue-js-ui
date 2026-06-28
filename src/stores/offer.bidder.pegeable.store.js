@@ -23,7 +23,7 @@ export const useBidderOffersStore = defineStore('bidder-offers', {
             this.items = content;
         },
 
-         async loadMoreOffersByBidder(requestedPage, pageSize) {
+         async loadMoreOffers(requestedPage, pageSize) {
             const { currentPage, totalPages, content } = await findOffersByBidder(requestedPage, pageSize);
             this.page = currentPage;
             this.pages = totalPages;
