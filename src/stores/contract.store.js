@@ -5,8 +5,5 @@ export const useContractStore = defineStore('contract', {
     state: () => ({}),
 
     actions: {
-        async saveContract(contractRequest) {
-            return await save(contractRequest);
-        }
     }
 })
