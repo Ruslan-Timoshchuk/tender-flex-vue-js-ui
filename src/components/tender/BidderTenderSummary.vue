@@ -48,7 +48,6 @@
 
 <script>
 import { useTenderPegeableStore } from "@/stores/tender.pageable.store"
-import { navigateToTender } from "@/components/actions"
 import ToolBarTitle from "@/components/childs/ToolBarTitle.vue"
 import EmptyTableTitle from "@/components/childs/EmptyTableTitle.vue"
 import TableHeader from "@/components/tender/childs/TableHeader.vue"
@@ -67,8 +66,7 @@ export default {
     bottom: 285,
     page: 1,
     pageSize: 10,
-    pages: 1,
-    navigateToTender
+    pages: 1
   }),
 
   methods: {
