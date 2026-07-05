@@ -22,7 +22,6 @@
         @load-more-on-scroll="loadMoreOnScroll"
         @select-offer="(offer) => openOfferDetails(offer)"
       ></OffersSummaryTable>
-      
     </div>
   </v-card>
   </v-container>
@@ -72,7 +71,7 @@ export default {
     openOfferDetails(offer) {
       this.$router.push({ 
         name: "bidder-offer-details", 
-        params: { offerId: offer.offerId, tenderId: tenderId } });
+        params: { offerId: offer.offerId, tenderId: offer.tenderId } });
     }
   },
 
