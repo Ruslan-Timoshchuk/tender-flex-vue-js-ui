@@ -20,7 +20,7 @@
         status="Status"
         :offers="contractorOffersStore.offers"
         @load-more-on-scroll="loadMoreByContractor"
-        @select-offer="(offer) => navigateToTender(offer.tender)"
+        @select-offer="(offer) => openOfferDetails(offer)"
       ></OffersSummaryTable>
     </div>
   </v-card>
@@ -66,6 +66,12 @@ export default {
         this.loading = false;
         this.exceptionAlert.activateAlert(error);
       }
+    },
+
+     openOfferDetails(offer) {
+       this.$router.push({ 
+         name: "contractor-offer-details", 
+         params: { id: offer.offerId } });
     }
   },
 
