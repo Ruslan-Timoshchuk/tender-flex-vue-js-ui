@@ -176,7 +176,7 @@ export default {
     },
 
     async approveContract(approveContractDecisionRequest) {
-      this.awardDecisionStore.sendDeclineContractDecision(approveContractDecisionRequest);
+      this.awardDecisionStore.sendApproveContractDecision(approveContractDecisionRequest);
     }
   },
 
