@@ -69,9 +69,13 @@ export default {
     },
 
      openOfferDetails(offer) {
-       this.$router.push({ 
-         name: "contractor-offer-details", 
-         params: { id: offer.offerId } });
+      this.$router.push({
+        name: "contractor-offer-details",
+        params: {
+          offerId: offer.offerId,
+          tenderId: offer.tenderId
+        }
+      });
     }
   },
 

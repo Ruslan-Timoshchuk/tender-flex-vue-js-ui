@@ -17,8 +17,8 @@
             ><v-toolbar-title 
               class="ml-14 mb-4" 
               style="font-size: 1.5rem"
-            >{{ tenderStore.getTender.cpv.summary }} 
-             ({{ tenderStore.getTender.cpv.code }})
+            >{{ tenderStore.tender.cpv.summary }} 
+             ({{ tenderStore.tender.cpv.code }})
             </v-toolbar-title>
           <v-btn 
             rounded="0" 
@@ -117,7 +117,7 @@ export default {
   },
 
   async mounted() {
-    this.tenderStore.loadContractorTenderDetailsById(this.$route.params.id);
+    this.tenderStore.loadTenderDetailsById(this.$route.params.id);
   }
 }
 </script>
