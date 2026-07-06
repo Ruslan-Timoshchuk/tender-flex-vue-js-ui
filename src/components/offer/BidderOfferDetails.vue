@@ -190,11 +190,11 @@ export default {
     },
 
     awardDecisionId() {
-      return this.tenderStore.item.awardDecision.id;
+      return this.tenderStore.tender.awardDecision.id;
     },
 
     isAwardDecision() {
-      const offerStatus = this.offerStore.item.statusName;
+      const offerStatus = this.offerStore.offer.statusName;
       return [
         'OFFER_SELECTED_BY_CONTRACTOR',
         'CONTRACT_APPROVED_BY_BIDDER',
@@ -203,7 +203,7 @@ export default {
     },
 
     isRejectDecision() {
-      const offerStatus = this.offerStore.item.statusName;
+      const offerStatus = this.offerStore.offer.statusName;
       return [
         'OFFER_REJECTED_BY_CONTRACTOR'
       ].includes(offerStatus);
