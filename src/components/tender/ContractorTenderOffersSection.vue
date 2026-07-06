@@ -169,7 +169,7 @@ export default {
   },
 
   async mounted() {
-    this.tenderStore.loadContractorTenderDetailsById(this.tenderId);
+    this.tenderStore.loadTenderDetailsById(this.tenderId);
     const requestedPage = this.tenderOffersStore.currentPage;
     this.tenderOffersStore.loadOffersByTender(this.tenderId, requestedPage, this.pageSize);
   }

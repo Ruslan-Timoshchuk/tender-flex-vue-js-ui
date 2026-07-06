@@ -23,18 +23,18 @@
     </template>
   </v-toolbar>
   <div class="mt-n8 mb-12">
-   <OfferDetails :offer="offerStore.getOffer">
+   <OfferDetails :offer="offerStore.offer">
         <template #documents>
             <v-row>
                 <FileVchip 
-                  :fileName="offerStore.getOffer.proposition.name"
-                  :fileKey="offerStore.getOffer.proposition.awsS3fileKey" 
+                  :fileName="offerStore.offer.proposition.name"
+                  :fileKey="offerStore.offer.proposition.awsS3fileKey" 
                   @show-file="showFile">
                 </FileVchip>
             </v-row>
         </template>
     </OfferDetails>
-    <v-container v-if="offerStore.getOffer.statusName === 'OFFER_RECEIVED'" class="d-flex justify-end mt-2">
+    <v-container v-if="offerStore.offer.statusName === 'OFFER_RECEIVED'" class="d-flex justify-end mt-2">
         <v-btn class="mx-2" variant="outlined" color="blue" @click="sendRejectDecision({
             offerId: offerId,
             rejectDecisionId: rejectDecisionId
