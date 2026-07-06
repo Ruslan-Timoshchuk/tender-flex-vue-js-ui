@@ -126,11 +126,11 @@ export default {
         },
 
         awardDecisionId() {
-            return this.tenderStore.item.rejectDecision.id;
+            return this.tenderStore.tender.awardDecision.id;
         },
 
         rejectDecisionId() {
-            return this.tenderStore.item.rejectDecision.id;
+            return this.tenderStore.tender.rejectDecision.id;
         },
 
         isDecisionActions() {
