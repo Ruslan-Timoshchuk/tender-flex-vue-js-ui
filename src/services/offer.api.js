@@ -1,6 +1,7 @@
 import axiosApiClient from "@/services/axios.api.client";
 
 const URL_OFFERS = 'api/v1/offers';
+const URL_BIDDER_OFFER_DETAILS = "api/v1/offers/bidder-details";
 const URL_CONTRACTOR_OFFER_DETAILS = "api/v1/offers/contractor-details";
 const URL_BIDDER_COUNT = 'api/v1/offers/bidder-count';
 const URL_CONTRACTOR_COUNT = 'api/v1/offers/contractor-count';
@@ -28,7 +29,12 @@ export const findOffersByTender = async (tenderId, requestedPage, pageSize) => {
     return data;
 }
 
-export const findContractorOfferDetailsById = async (offerId) => {
+export const loadBidderOfferDetailsById = async (offerId) => {
+    const { data } = await axiosApiClient.get(`${URL_BIDDER_OFFER_DETAILS}/${offerId}`);
+    return data;
+}
+
+export const loadContractorOfferDetailsById = async (offerId) => {
     const { data } = await axiosApiClient.get(`${URL_CONTRACTOR_OFFER_DETAILS}/${offerId}`);
     return data;
 }

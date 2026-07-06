@@ -1,33 +1,37 @@
 import { defineStore } from 'pinia'
-import { save, findContractorOfferDetailsById } from "@/services/offer.api";
+import { save, loadBidderOfferDetailsById, loadContractorOfferDetailsById } from "@/services/offer.api";
 
 export const useOfferStore = defineStore('offer', {
     state: () => ({
-        offer: {
+        item: {
             currency: {},
             companyProfile: {
                 country: {},
                 contactPerson: {}
             },
             bidPrice: 0,
-            proposition: {},
+            proposition: {}
         },
     }),
 
 
     getters: {
-        getOffer: (state) => {
-            return state.offer;
+        offer: (state) => {
+            return state.item;
         }
     },
 
     actions: {
         async save(offerRequest) {
-            this.offer = await save(offerRequest);
+            this.item = await save(offerRequest);
+        },
+
+        async loadBidderOfferDetailsById(offerId) {
+            this.item = await loadBidderOfferDetailsById(offerId);
         },
 
         async loadContractorOfferDetailsById(offerId) {
-            this.offer = await findContractorOfferDetailsById(offerId);
+            this.item = await loadContractorOfferDetailsById(offerId);
         }
     }
 })
