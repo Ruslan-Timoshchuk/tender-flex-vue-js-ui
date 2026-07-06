@@ -85,7 +85,7 @@ export default {
     },
 
     openTenderDetails(tender) {
-      if (tender.offerStatusName === 'NOT_SENT') {
+      if (tender.offerStatusName === 'OFFER_HAS_NOT_SENT') {
         this.$router.push({
           name: 'bidder-tender-details',
           params: {

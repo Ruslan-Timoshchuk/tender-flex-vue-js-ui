@@ -89,7 +89,7 @@ export default {
   },
 
   async mounted() {
-    this.tenderStore.loadBidderTenderDetailsById(this.$route.params.tenderId);
+    this.tenderStore.loadTenderDetailsById(this.$route.params.tenderId);
   }
 }
 </script>
