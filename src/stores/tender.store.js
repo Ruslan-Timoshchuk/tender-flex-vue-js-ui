@@ -3,7 +3,7 @@ import { save, loadTenderDetailsById } from '@/services/tender.api';
 
 export const useTenderStore = defineStore('tender', {
     state: () => ({
-        tender: {
+        item: {
             companyProfile: {
                 country: {},
                 contactPerson: {}
@@ -25,19 +25,19 @@ export const useTenderStore = defineStore('tender', {
     }),
 
     getters: {
-        getTender: (state) => {
-            return state.tender;
+        tender: (state) => {
+            return state.item;
         }
     },
 
     actions: {
         async save(tenderRequest) {
-            this.tender = await save(tenderRequest);
-            return this.tender;
+            this.item = await save(tenderRequest);
+            return this.item;
         },
 
         async loadTenderDetailsById(tenderId) {
-            this.tender = await loadTenderDetailsById(tenderId);
+            this.item = await loadTenderDetailsById(tenderId);
         }
     }
 })

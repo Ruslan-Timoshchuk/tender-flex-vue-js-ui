@@ -6,7 +6,7 @@
     <template v-slot:extension>
       <v-container class="px-15">
         <v-toolbar-title class="ml-14 mb-12" style="font-size: 1.5rem">
-          {{ tenderStore.tender.cpv.summary }} ({{ tenderStore.tender.cpv.code }})
+          {{ tenderStore.item.cpv.summary }} ({{ tenderStore.item.cpv.code }})
         </v-toolbar-title>
       </v-container>
     </template>
@@ -14,12 +14,12 @@
 
   <div class="mt-n8 mb-12">
   <TenderDetails 
-    :tender="tenderStore.tender">
+    :tender="tenderStore.item">
     <template #documents>
       <v-row>
         <FileVchip 
-          :fileName="tenderStore.tender.contract.fileMetadata.name" 
-          :fileKey="tenderStore.tender.contract.fileMetadata.awsS3fileKey"
+          :fileName="tenderStore.item.contract.fileMetadata.name" 
+          :fileKey="tenderStore.item.contract.fileMetadata.awsS3fileKey"
           @show-file="showFile">
         </FileVchip>
       </v-row>

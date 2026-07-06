@@ -5,7 +5,7 @@
     </v-chip>
     <template v-slot:extension>
       <v-container class="px-15">
-        <v-toolbar-title class="ml-14 mb-4" style="font-size: 1.5rem">{{ tenderStore.tender.cpv.summary }} ({{ tenderStore.tender.cpv.code }})</v-toolbar-title>
+        <v-toolbar-title class="ml-14 mb-4" style="font-size: 1.5rem">{{ tenderStore.item.cpv.summary }} ({{ tenderStore.item.cpv.code }})</v-toolbar-title>
           <div style="margin-left: 3rem; margin-bottom: 3rem;">
             <v-btn v-if="isAwardDecision" @click="tab='awardDecision'" rounded="0">Award Decision</v-btn>
             <v-btn v-else-if="isRejectDecision" @click="tab='rejectDecision'" rounded="0">Reject Decision</v-btn>
@@ -34,8 +34,8 @@
         <v-row justify="center mb-10">
           <v-col md = 4 class="text-center">
           <FileVchip
-             :fileName="tenderStore.tender.awardDecision.fileMetadata.name"
-             :fileKey="tenderStore.tender.awardDecision.fileMetadata.awsS3fileKey"
+             :fileName="tenderStore.item.awardDecision.fileMetadata.name"
+             :fileKey="tenderStore.item.awardDecision.fileMetadata.awsS3fileKey"
             @show-file="showFile"
           ></FileVchip>
         </v-col>
@@ -68,8 +68,8 @@
         <v-row justify="center mb-10">
           <v-col md = 4 class="text-center">
           <FileVchip
-             :fileName="tenderStore.tender.rejectDecision.fileMetadata.name"
-             :fileKey="tenderStore.tender.rejectDecision.fileMetadata.awsS3fileKey"
+             :fileName="tenderStore.item.rejectDecision.fileMetadata.name"
+             :fileKey="tenderStore.item.rejectDecision.fileMetadata.awsS3fileKey"
             @show-file="showFile"
           ></FileVchip>
         </v-col>
@@ -80,12 +80,12 @@
 
     <v-window-item value="tenderDescription">
        <TenderDetails 
-    :tender="tenderStore.tender">
+    :tender="tenderStore.item">
     <template #documents>
       <v-row>
         <FileVchip 
-          :fileName="tenderStore.tender.contract.fileMetadata.name" 
-          :fileKey="tenderStore.tender.contract.fileMetadata.awsS3fileKey"
+          :fileName="tenderStore.item.contract.fileMetadata.name" 
+          :fileKey="tenderStore.item.contract.fileMetadata.awsS3fileKey"
           @show-file="showFile">
         </FileVchip>
       </v-row>
@@ -190,7 +190,7 @@ export default {
     },
 
     awardDecisionId() {
-      return this.tenderStore.tender.awardDecision.id;
+      return this.tenderStore.item.awardDecision.id;
     },
 
     isAwardDecision() {

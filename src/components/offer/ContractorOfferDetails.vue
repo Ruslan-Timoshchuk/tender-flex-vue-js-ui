@@ -15,9 +15,9 @@
         <v-container 
           class="px-15"
             ><v-toolbar-title 
-              class="ml-14 mb-8" 
+              class="ml-14 mb-10" 
               style="font-size: 1.5rem"
-            >{{ 'Contractor offer details' }}
+            >{{ tenderStore.tender.cpv.summary }} ({{ tenderStore.tender.cpv.code }})
             </v-toolbar-title>
         </v-container>
     </template>
@@ -34,6 +34,19 @@
             </v-row>
         </template>
     </OfferDetails>
+    <v-container v-if="isDecisionActions" class="d-flex justify-end mt-2">
+        <v-btn class="mx-2" variant="outlined" color="blue" @click="sendRejectDecision({
+            offerId: offerId,
+            rejectDecisionId: rejectDecisionId
+        })">
+            Send Reject Decision
+        </v-btn>
+        <v-btn class="mx-2" variant="flat" color="blue" @click="sendAwardDecision({
+            offerId: offerId,
+            awardDecisionId: awardDecisionId
+        })">Send Award Decision
+        </v-btn>
+    </v-container>
 </div>
 
     <FileViewerModal
@@ -48,7 +61,10 @@ import FileVchip from '@/components/childs/FileVchip.vue'
 import OfferDetails from '@/components/offer/childs/OfferDetails.vue';
 import FileViewerModal from "@/components/childs/FileViewerModal.vue"
 import { useOfferStore } from '@/stores/offer.store';
+import { useTenderStore } from '@/stores/tender.store';
 import { useFileStore } from '@/stores/file.store';
+import { useRejectDecisionStore } from '@/stores/reject.decision.store';
+import { useAwardDecisionStore } from '@/stores/award.decision.store';
 import {exceptionAlert } from "@/components/alerts"
 
 export default {
@@ -60,7 +76,10 @@ export default {
 
     data: () => ({
         offerStore: useOfferStore(),
+        tenderStore: useTenderStore(),
         fileStore: useFileStore(),
+        rejectDecisionStore: useRejectDecisionStore(),
+        awardDecisionStore: useAwardDecisionStore(),
         fileUrl: '',
         isOpen: false,
         exceptionAlert
@@ -85,17 +104,45 @@ export default {
                 this.fileUrl = null;
             }
             this.isOpen = false;
+        },
+
+        async sendRejectDecision(rejectOfferDecisionRequest) {
+            await this.rejectDecisionStore.sendRejectDecision(rejectOfferDecisionRequest);
+        },
+
+        async sendAwardDecision(awardOfferDecisionRequest) {
+            await this.awardDecisionStore.sendAwardDecision(awardOfferDecisionRequest);
         }
+
     },
 
     computed: {
         offerId() {
-            return Number(this.$route.params.id);
+            return Number(this.$route.params.offerId);
+        },
+
+        tenderId() {
+            return Number(this.$route.params.tenderId);
+        },
+
+        awardDecisionId() {
+            return this.tenderStore.item.rejectDecision.id;
+        },
+
+        rejectDecisionId() {
+            return this.tenderStore.item.rejectDecision.id;
+        },
+
+        isDecisionActions() {
+            const contract = this.tenderStore.tender.contract;
+            const offer = this.offerStore.offer;
+            return offer.statusName === 'OFFER_RECEIVED' && contract.status === 'DRAFT';
         }
     },
 
-    mounted() {
-        this.offerStore.loadContractorOfferDetailsById(this.offerId);
+    async mounted() {
+        await this.offerStore.loadContractorOfferDetailsById(this.offerId);
+        await this.tenderStore.loadTenderDetailsById(this.tenderId)
     }
 }
 </script>

@@ -5,7 +5,7 @@
     </v-chip>
     <template v-slot:extension>
       <v-container class="px-15">
-        <v-toolbar-title class="ml-14 mb-4" style="font-size: 1.5rem">{{ tenderStore.tender.cpv.summary }} ({{ tenderStore.tender.cpv.code }})</v-toolbar-title>
+        <v-toolbar-title class="ml-14 mb-4" style="font-size: 1.5rem">{{ tenderStore.item.cpv.summary }} ({{ tenderStore.item.cpv.code }})</v-toolbar-title>
           <div style="margin-left: 3rem; margin-bottom: 3rem;"> 
             <v-btn @click="tab='offers'" rounded="0">Offers</v-btn>
             <v-btn @click="tab='tenderDescription'" rounded="0">Tender Description</v-btn>
@@ -20,32 +20,32 @@
         <TenderOffersSummaryTable
           :offers="tenderOffersStore.offers"
           @load-more-on-scroll="loadMoreByTender"
-          @select-offer="(offer) => navigateToOffer(offer)"
+          @select-offer="(offer) => openOfferDetails(offer.offerId)"
         ></TenderOffersSummaryTable>
       </v-card>
     </v-window-item>
 
     <v-window-item value="tenderDescription">
-     <TenderDetails :tender="tenderStore.tender">
+     <TenderDetails :tender="tenderStore.item">
         <template #documents>
           <v-row>
             <FileVchip 
-              :fileName="tenderStore.tender.contract.fileMetadata.name"
-              :fileKey="tenderStore.tender.contract.fileMetadata.awsS3fileKey" 
+              :fileName="tenderStore.item.contract.fileMetadata.name"
+              :fileKey="tenderStore.item.contract.fileMetadata.awsS3fileKey" 
               @show-file="showFile">
             </FileVchip>
           </v-row>
           <v-row>
             <FileVchip 
-              :fileName="tenderStore.tender.awardDecision.fileMetadata.name"
-              :fileKey="tenderStore.tender.awardDecision.fileMetadata.awsS3fileKey" 
+              :fileName="tenderStore.item.awardDecision.fileMetadata.name"
+              :fileKey="tenderStore.item.awardDecision.fileMetadata.awsS3fileKey" 
               @show-file="showFile">
             </FileVchip>
           </v-row>
           <v-row>
             <FileVchip 
-              :fileName="tenderStore.tender.rejectDecision.fileMetadata.name"
-              :fileKey="tenderStore.tender.rejectDecision.fileMetadata.awsS3fileKey" 
+              :fileName="tenderStore.item.rejectDecision.fileMetadata.name"
+              :fileKey="tenderStore.item.rejectDecision.fileMetadata.awsS3fileKey" 
               @show-file="showFile">
             </FileVchip>
           </v-row>
@@ -135,31 +135,15 @@ export default {
         this.isOpen = false;
       },
 
-    navigateToOffer(offer) {
-      const tender = this.tenderStore.getTender;
-      const isOfferReceived = offer.offerStatusName === 'OFFER_RECEIVED';
-      const isDraftContract = tender.contract.status === 'DRAFT';
-      let routeConfig;
-      if (isOfferReceived && isDraftContract) {
-        routeConfig = {
-          name: 'contractor-offer-decision-actions',
-          params: {
-            offerId: offer.offerId,
-            awardDecisionId: this.tenderStore.getTender.awardDecision.id,
-            rejectDecisionId: this.tenderStore.getTender.rejectDecision.id
-          }
+    openOfferDetails(offerId) {
+      this.$router.push({
+        name: 'contractor-offer-details',
+        params: {
+          offerId: offerId,
+          tenderId: this.tenderId
         }
-      } else {
-        routeConfig = {
-          name: 'contractor-offer-details',
-          params: {
-            id: offer.offerId
-          }
-        }
-      }
-      this.$router.push(routeConfig);
+      });
     }
-
   },
 
   computed: {
