@@ -1,42 +1,48 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import LogIn from '@/components/LogIn.vue'
-import ToolBar from '@/components/ToolBar.vue'
-import TendersList from '@/components/tender/TenderList.vue'
+import ContractorToolbar from '@/components/toolbar/ContractorToolbar.vue'
+import ContractorTenderOffersSection from '@/components/tender/ContractorTenderOffersSection.vue'
+import ContractorTenderDescription from '@/components/tender/ContractorTenderDescription.vue'
+import BidderTenderDetails from '@/components/tender/BidderTenderDetails.vue'
+import BidderOfferDetails from '@/components/offer/BidderOfferDetails.vue'
+import ContractorTenderSummary from '@/components/tender/ContractorTenderSummary.vue'
+import BidderToolbar from '@/components/toolbar/BidderToolbar.vue'
+import BidderTenderSummary from '@/components/tender/BidderTenderSummary.vue'
 import Tender from '@/components/tender/Tender.vue'
-import BidDetails from '@/components/BidDetails.vue'
 import Offer from '@/components/offer/Offer.vue'
-import OfferList from '@/components/offer/OfferList.vue'
+import BidderOfferSummary from '@/components/offer/BidderOfferSummary.vue'
+import ContractorOfferSummary from '@/components/offer/ContractorOfferSummary.vue'
 import { RouterView } from 'vue-router'
+import ContractorOfferDetails from '@/components/offer/ContractorOfferDetails.vue'
 
 const routes = [
 
   { name: 'login', path: '', component: LogIn },
 
   {
-    name: 'user-module', path: '/users/:user_id/:role', component: ToolBar,
+    name: 'contractor-module', path: '/contractors', component: ContractorToolbar,
     children: [
-      {
-        path: 'bids', component: RouterView,
-        children: [
-          { name: 'bid-details', path: 'details', component: BidDetails },
-          {
-            path: 'tenders', component: RouterView,
-            children: [
-              { name: 'new-tender', path: 'create-new-tender', component: Tender },
-              { name: 'tenders', path: 'list', component: TendersList }
-            ]
-          },
-          {
-            path: 'offers', component: RouterView,
-            children: [
-              { name: 'new-offer', path: 'send-new-offer', component: Offer },
-              { name: 'offers', path: 'list', component: OfferList },
-            ]
-          },
-        ]
-      }
-    ],
-  }
+      { name: 'new-tender', path: 'create-new-tender', component: Tender },
+      { name: 'contractor-tenders', path: 'tenders', component: ContractorTenderSummary },
+      { name: 'contractor-tender-description', path: 'tenders/description/:id', component: ContractorTenderDescription },
+      { name: 'contractor-tender-offers-section', path: 'tenders/details/:id', component: ContractorTenderOffersSection },
+      { name: 'contractor-offers', path: 'offers', component: ContractorOfferSummary },
+      { name: 'contractor-offer-details', path: 'offers/offer-id/:offerId/tender-id/:tenderId', component: ContractorOfferDetails }
+    ]
+  },
+
+  {
+    name: 'bidder-module', path: '/bidders', component: BidderToolbar,
+    children: [
+      { name: 'bidder-tenders', path: 'tenders', component: BidderTenderSummary },
+      { name: 'bidder-tender-details', path: 'tenders/:tenderId', component: BidderTenderDetails },
+      { name: 'new-offer', path: 'offers/send-new-offer/tender-id/:tenderId', component: Offer },
+      { name: 'bidder-offers', path: 'offers', component: BidderOfferSummary },
+      { name: 'bidder-offer-details', path: 'offers/details/offer-id/:offerId/tender-id/:tenderId', component: BidderOfferDetails }
+    ]
+  },
+
+  { name: 'administrator-module', path:'/administrators', component: RouterView },
 
 ]
 const router = createRouter({

@@ -1,0 +1,148 @@
+<template>
+    <v-toolbar 
+   color="blue" 
+   extended 
+   extension-height="100"
+   ><v-chip 
+     :to="{ name: 'contractor-tenders' }" 
+     style="margin-left: 12rem" 
+     variant="text" 
+     text-color="white"
+     prepend-icon="mdi-keyboard-backspace"
+  >Back</v-chip>
+    <template 
+      v-slot:extension>
+        <v-container 
+          class="px-15"
+            ><v-toolbar-title 
+              class="ml-14 mb-10" 
+              style="font-size: 1.5rem"
+            >{{ tenderStore.tender.cpv.summary }} ({{ tenderStore.tender.cpv.code }})
+            </v-toolbar-title>
+        </v-container>
+    </template>
+  </v-toolbar>
+  <div class="mt-n8 mb-12">
+   <OfferDetails :offer="offerStore.offer">
+        <template #documents>
+            <v-row>
+                <FileVchip 
+                  :fileName="offerStore.offer.proposition.name"
+                  :fileKey="offerStore.offer.proposition.awsS3fileKey" 
+                  @show-file="showFile">
+                </FileVchip>
+            </v-row>
+        </template>
+    </OfferDetails>
+    <v-container v-if="isDecisionActions" class="d-flex justify-end mt-2">
+        <v-btn class="mx-2" variant="outlined" color="blue" @click="sendRejectDecision({
+            offerId: offerId,
+            rejectDecisionId: rejectDecisionId
+        })">
+            Send Reject Decision
+        </v-btn>
+        <v-btn class="mx-2" variant="flat" color="blue" @click="sendAwardDecision({
+            offerId: offerId,
+            awardDecisionId: awardDecisionId
+        })">Send Award Decision
+        </v-btn>
+    </v-container>
+</div>
+
+    <FileViewerModal
+      v-model:isOpen="isOpen"
+      @update:isOpen="closeFile"
+      :fileUrl="fileUrl"
+   ></FileViewerModal>
+</template>
+
+<script>
+import FileVchip from '@/components/childs/FileVchip.vue'
+import OfferDetails from '@/components/offer/childs/OfferDetails.vue';
+import FileViewerModal from "@/components/childs/FileViewerModal.vue"
+import { useOfferStore } from '@/stores/offer.store';
+import { useTenderStore } from '@/stores/tender.store';
+import { useFileStore } from '@/stores/file.store';
+import { useRejectDecisionStore } from '@/stores/reject.decision.store';
+import { useAwardDecisionStore } from '@/stores/award.decision.store';
+import {exceptionAlert } from "@/components/alerts"
+
+export default {
+    components: {
+        FileVchip,
+        OfferDetails,
+        FileViewerModal
+    },
+
+    data: () => ({
+        offerStore: useOfferStore(),
+        tenderStore: useTenderStore(),
+        fileStore: useFileStore(),
+        rejectDecisionStore: useRejectDecisionStore(),
+        awardDecisionStore: useAwardDecisionStore(),
+        fileUrl: '',
+        isOpen: false,
+        exceptionAlert
+    }),
+
+    methods: {
+        async showFile(isOpen, fileKey, callback) {
+            try {
+                const file = await this.fileStore.downloadFile(fileKey);
+                this.fileUrl = URL.createObjectURL(file);
+                this.isOpen = isOpen;
+            } catch (error) {
+                this.exceptionAlert.activateAlert("File download failed:", error);
+            } finally {
+                if (callback) callback();
+            }
+        },
+
+        closeFile() {
+            if (this.fileUrl) {
+                URL.revokeObjectURL(this.fileUrl);
+                this.fileUrl = null;
+            }
+            this.isOpen = false;
+        },
+
+        async sendRejectDecision(rejectOfferDecisionRequest) {
+            await this.rejectDecisionStore.sendRejectDecision(rejectOfferDecisionRequest);
+        },
+
+        async sendAwardDecision(awardOfferDecisionRequest) {
+            await this.awardDecisionStore.sendAwardDecision(awardOfferDecisionRequest);
+        }
+
+    },
+
+    computed: {
+        offerId() {
+            return Number(this.$route.params.offerId);
+        },
+
+        tenderId() {
+            return Number(this.$route.params.tenderId);
+        },
+
+        awardDecisionId() {
+            return this.tenderStore.tender.awardDecision.id;
+        },
+
+        rejectDecisionId() {
+            return this.tenderStore.tender.rejectDecision.id;
+        },
+
+        isDecisionActions() {
+            const contract = this.tenderStore.tender.contract;
+            const offer = this.offerStore.offer;
+            return offer.statusName === 'OFFER_RECEIVED' && contract.status === 'DRAFT';
+        }
+    },
+
+    async mounted() {
+        await this.offerStore.loadContractorOfferDetailsById(this.offerId);
+        await this.tenderStore.loadTenderDetailsById(this.tenderId)
+    }
+}
+</script>

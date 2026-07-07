@@ -1,0 +1,52 @@
+import axiosApiClient from "@/services/axios.api.client";
+
+const URL_OFFERS = 'api/v1/offers';
+const URL_BIDDER_OFFER_DETAILS = "api/v1/offers/bidder-details";
+const URL_CONTRACTOR_OFFER_DETAILS = "api/v1/offers/contractor-details";
+const URL_BIDDER_COUNT = 'api/v1/offers/bidder-count';
+const URL_CONTRACTOR_COUNT = 'api/v1/offers/contractor-count';
+const URL_TENDER_OFFERS_PAGE = 'api/v1/offers/tender-page';
+const URL_CONTRACTOR_OFFERS_PAGE = 'api/v1/offers/contractor-page';
+const URL_BIDDER_OFFERS_PAGE = 'api/v1/offers/bidder-page';
+
+export const save = async (offerRequest) => {
+    await axiosApiClient.post(`${URL_OFFERS}`, offerRequest);
+}
+
+export const countOffersByBidder = async () => {
+    const { data } = await axiosApiClient.get(`${URL_BIDDER_COUNT}`);
+    return data;
+}
+
+export const countOffersByContractor = async () => {
+    const { data } = await axiosApiClient.get(`${URL_CONTRACTOR_COUNT}`);
+    return data;
+}
+
+export const findOffersByTender = async (tenderId, requestedPage, pageSize) => {
+    const { data } = await axiosApiClient
+        .get(`${URL_TENDER_OFFERS_PAGE}/${tenderId}?requestedPage=${requestedPage}&pageSize=${pageSize}`);
+    return data;
+}
+
+export const loadBidderOfferDetailsById = async (offerId) => {
+    const { data } = await axiosApiClient.get(`${URL_BIDDER_OFFER_DETAILS}/${offerId}`);
+    return data;
+}
+
+export const loadContractorOfferDetailsById = async (offerId) => {
+    const { data } = await axiosApiClient.get(`${URL_CONTRACTOR_OFFER_DETAILS}/${offerId}`);
+    return data;
+}
+
+export const findOffersByContractor = async (requestedPage, pageSize) => {
+    const { data } = await axiosApiClient
+        .get(`${URL_CONTRACTOR_OFFERS_PAGE}?requestedPage=${requestedPage}&pageSize=${pageSize}`);
+    return data;
+}
+
+export const findOffersByBidder = async (requestedPage, pageSize) => {
+    const { data } = await axiosApiClient
+        .get(`${URL_BIDDER_OFFERS_PAGE}?requestedPage=${requestedPage}&pageSize=${pageSize}`);
+    return data;
+}

@@ -14,8 +14,8 @@
           registrationNumberHint="Enter the national registration number of the buyer (e.g.ULG BE 0325 777 171)"
           @update-registration-number="(value) => tender.companyProfile.registrationNumber = value"
           countryHint="Choose the country of the buyer"
-          :countries="countries"
-          @update-country="(value) => tender.companyProfile.country.id = value"
+          :countries=countryStore.countries
+          @update-country="(value) => tender.companyProfile.countryId = value"
           cityHint="Enter the city of the buyer"
           @update-city="(value) => tender.companyProfile.city = value"
           firstNameHint="Enter the name of contact person"
@@ -37,8 +37,8 @@
                 hint="Choose CPV code with corresponded to this code description"
                 label="CPV Code"
                 itemTitle="code"
-                @update-value="(value) => tender.cpv.id = value"
-                :items="cpvs">
+                @update-value="(value) => tender.cpvId = value"
+                :items=cpvStore.cpvs>
               </SelectOptionInput>
             </v-col>
 
@@ -48,8 +48,8 @@
                 hint="Choose the type of contract"
                 label="Type"
                 itemTitle="title"
-                @update-value="(value) => contract.contractType.id = value"
-                :items="contractTypes">
+                @update-value="(value) => tender.contract.contractTypeId = value"
+                :items="contractTypeStore.contractTypes">
               </SelectOptionInput>
             </v-col>
             <v-col cols="12" md="4">
@@ -65,7 +65,7 @@
               <NumericInput
                 title="Maximum Tender Value"
                 hint="Enter maximum price of the Tender contract"
-                @update-value="(value) => contract.maxPrice = value"
+                @update-value="(value) => tender.contract.maxPrice = value"
                 :counter="8"
                 label="Maximum tender value"
               ></NumericInput>
@@ -74,7 +74,7 @@
               <NumericInput
                 title="Minimum Tender Value"
                 hint="Enter minimum price of the Tender contract"
-                @update-value="value => contract.minPrice = value"
+                @update-value="value => tender.contract.minPrice = value"
                 :counter="8"
                 label="Minimum tender value"
               ></NumericInput>
@@ -85,8 +85,8 @@
                 hint="Choose the currency"
                 label="Currency"
                 itemTitle="code"
-                @update-value="(value) => contract.currency.id = value"
-                :items="currencies">
+                @update-value="(value) => tender.contract.currencyId = value"
+                :items="currencyStore.currencies">
               </SelectOptionInput>
             </v-col>
           </v-row>
@@ -118,7 +118,7 @@
               title="Deadline for Signing"
               hint="Choose the deadline date for signed contract submission"
               :earliestDate="earliestDeadline"
-               @update-value="(value) => contract.signedDeadline = value"
+               @update-value="(value) => tender.contract.signedDeadline = value"
             ></DateInput>
           </v-col>
           </v-row>
@@ -171,9 +171,13 @@
 </template>
 
 <script>
-import { URL_REST_API } from "@/rest.api.endpoints"
 import { format } from 'date-fns'
-import { totalStore, fetchFromEndpoint, uploadFile, createDocumentRecord } from "@/components/actions"
+import { useFileStore } from "@/stores/file.store"
+import { useCountryStore } from "@/stores/country.store"
+import { useCpvStore } from "@/stores/cpv.store"
+import { useContractTypeStore } from "@/stores/contract.type.store"
+import { useCurrencyStore } from "@/stores/currency.store"
+import { useTenderStore } from "@/stores/tender.store"
 import { successAlert, exceptionAlert } from "@/components/alerts"
 import TextInput from "@/components/childs/TextInput.vue"
 import NumericInput from "@/components/childs/NumericInput.vue"
@@ -201,37 +205,25 @@ export default {
   },
 
   data: () => ({
-    fetchFromEndpoint,
-    uploadFile,
-    createDocumentRecord,
-    countries: [],
-    contractTypes: [],
-    cpvs: [],
-    currencies: [],
+    countryStore: useCountryStore(),
+    cpvStore: useCpvStore(),
+    contractTypeStore: useContractTypeStore(),
+    currencyStore: useCurrencyStore(),
+    tenderStore: useTenderStore(),
+    fileStore: useFileStore(),
     earliestDeadline: null,
     isDisabled: true,
     initialDate: null,
     tender: {
       companyProfile: {
-        country: {},
         contactPerson: {}
       },
-      cpv: {},
-    },
-    contract: {
-        contractType: {},
-        currency: {},
-        fileMetadata: {}
-      },
-    awardDecision: {
-      fileMetadata: {}
-    },
-    rejectDecision: {
-      fileMetadata: {}
+      contract: {},
+      awardDecision: {},
+      rejectDecision: {},
     },
     valid: false,
     attachment: {},
-    totalStore,
     successAlert,
     exceptionAlert,
     isOpenInParent: false,
@@ -246,24 +238,19 @@ export default {
 
     async save() {
       try {
-        await this.$router.push({ name: 'tenders' });
         const { contract, awardDecision, rejectDecision } = this.attachment;
-        const [contactFileMetadata, awardFileMetadata, rejectFileMetadata] = await Promise.all([
-          this.uploadFile(contract),
-          this.uploadFile(awardDecision),
-          this.uploadFile(rejectDecision),
+        const [contractFile, awardFile, rejectFile] = await Promise.all([
+          this.fileStore.uploadFile(contract),
+          this.fileStore.uploadFile(awardDecision),
+          this.fileStore.uploadFile(rejectDecision),
         ]);
-        this.tender.contractorId = this.$route.params.user_id;
         this.tender.publication = this.initialDate;
-        this.contract.fileMetadata.id = contactFileMetadata.data.id;
-        this.awardDecision.fileMetadata.id = awardFileMetadata.data.id;
-        this.rejectDecision.fileMetadata.id = rejectFileMetadata.data.id;
-        await this.createDocumentRecord({ tender: this.tender,
-                                          contract: this.contract,
-                                          awardDecision: this.awardDecision,
-                                          rejectDecision: this.rejectDecision }, URL_REST_API.PROCUREMENTS);
-        this.successAlert.activateAlert("Tender was successfully created");
-        this.totalStore.refreshTotalCounts(this.$route.params.userId);
+        this.tender.contract.fileMetadataId = contractFile.id;
+        this.tender.awardDecision.fileMetadataId = awardFile.id;
+        this.tender.rejectDecision.fileMetadataId = rejectFile.id;
+        await this.tenderStore.save(this.tender);
+        this.successAlert.activateAlert("Tender and all related structures were successfully created");
+        await this.$router.push({ name: 'contractor-tenders' });
       } catch (error) {
         if (error.response && error.response.status === 400) {
           this.exceptionAlert.activateAlert(error.response.data.message);
@@ -276,21 +263,18 @@ export default {
 
   async mounted() {
     try {
-      const [countries, cpvs, contractTypes, currencies] = await Promise.all([
-        this.fetchFromEndpoint(`${URL_REST_API.HOST}/${URL_REST_API.COUNTRIES_ALL}`),
-        this.fetchFromEndpoint(`${URL_REST_API.HOST}/${URL_REST_API.CPVS_ALL}`),
-        this.fetchFromEndpoint(`${URL_REST_API.HOST}/${URL_REST_API.CONTRACT_TYPES_ALL}`),
-        this.fetchFromEndpoint(`${URL_REST_API.HOST}/${URL_REST_API.CURRENCIES_ALL}`),
+      await Promise.all([
+        this.countryStore.loadCountries(),
+        this.cpvStore.loadCpvs(),
+        this.contractTypeStore.loadContractTypes(),
+        this.currencyStore.loadCurrencies(),
       ]);
-      this.countries = countries.data;
-      this.cpvs = cpvs.data;
-      this.contractTypes = contractTypes.data;
-      this.currencies = currencies.data;
     } catch (error) {
       this.exceptionAlert.activateAlert("Error occurred when fetching the data: " + error)
     }
     this.initialDate = format(new Date(), 'yyyy-MM-dd');
     this.earliestDeadline = format(new Date().getTime() + 86400000, 'yyyy-MM-dd');
   }
+
 }
 </script>
