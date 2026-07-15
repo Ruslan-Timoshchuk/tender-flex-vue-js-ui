@@ -43,14 +43,27 @@
       </v-item-group>
         <v-row v-if="offerStore.item.statusName === 'OFFER_SELECTED_BY_CONTRACTOR'" class="d-flex justify-center mt-2 mb-10">
       <v-col md="3">
-        <v-btn block variant="outlined" color="blue" @click="declineContract({ offerId: this.offerId, awardDecisionId: this.awardDecisionId })">
-            Decline
+        <v-btn 
+          block 
+          variant="outlined" 
+          color="blue" 
+          @click="declineContract({ 
+            offerId: this.offerId, 
+            awardDecisionId: this.awardDecisionId, 
+            tenderId: this.tenderId })"
+          >Decline
         </v-btn>
          </v-col>
           <v-col md="3">
-           <v-btn block variant="flat" color="blue"
-             @click="approveContract({ offerId: this.offerId, awardDecisionId: this.awardDecisionId, tenderId: this.tenderId })">
-             Approve
+           <v-btn 
+             block 
+             variant="flat" 
+             color="blue"
+             @click="approveContract({ 
+               offerId: this.offerId, 
+               awardDecisionId: this.awardDecisionId, 
+               tenderId: this.tenderId })"
+            >Approve
            </v-btn>
          </v-col>
        </v-row>
