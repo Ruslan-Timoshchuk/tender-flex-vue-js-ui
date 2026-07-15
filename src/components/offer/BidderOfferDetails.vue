@@ -49,7 +49,7 @@
          </v-col>
           <v-col md="3">
            <v-btn block variant="flat" color="blue"
-             @click="approveContract({ offerId: this.offerId, awardDecisionId: this.awardDecisionId })">
+             @click="approveContract({ offerId: this.offerId, awardDecisionId: this.awardDecisionId, tenderId: this.tenderId })">
              Approve
            </v-btn>
          </v-col>
